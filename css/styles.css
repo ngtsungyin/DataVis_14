@@ -1,22 +1,146 @@
-/* Base styles and layout style */
+/* styles.css - shared by all pages */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600&display=swap');
+
 :root{
-	--bg:#ffffff;
-	--fg:#111;
-	--accent:#1e88e5;
+  --accent: #cfdcb8;
+  --muted: #9a9a9a;
+  --text: #111;
+  --max-width: 1200px;
+  --page-padding: 60px;
 }
-html,body{
-	height:100%;
-	margin:0;
-	font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-	background:var(--bg);
-	color:var(--fg);
+
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,"Helvetica Neue",Arial;}
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
-header{
-	padding:1rem;
-	border-bottom:1px solid #eee;
+main {
+    flex: 1 1 auto;  
 }
-main{
-	padding:1rem;
-	max-width:1000px;
-	margin:0 auto;
+a{color:inherit;text-decoration:none}
+.container{max-width:var(--max-width);margin:0 auto;padding:0 24px}
+
+/* Top navigation */
+.site-header{
+  position:sticky;top:0;z-index:40;background:#fff;
+  border-bottom:1px solid rgba(0,0,0,0.03);
+}
+.navbar{display:flex;align-items:center;justify-content:center;height:84px}
+.navbar .nav{display:flex;gap:28px}
+.nav a{font-weight:600;font-size:20px;color:#000;padding:6px 8px}
+
+/* Hero */
+.hero{
+  padding:40px 0 80px;
+  text-align:center;
+  background:#fff;
+}
+.hero .title{
+  font-family:'Playfair Display',serif;
+  font-size:112px;
+  line-height:0.95;
+  margin:28px 0 36px;
+  color:var(--text);
+  letter-spacing:-1px;
+}
+.hero .hero-frame{
+  position:relative;
+  display:inline-block;
+  padding:40px;
+  border-radius:20px;
+  background:var(--accent);
+  box-shadow:0 18px 30px rgba(0,0,0,0.12);
+}
+.hero .hero-image{
+  width:960px;max-width:92vw;height:420px;display:block;border-radius:12px;object-fit:cover;border:10px solid #0b0b0b;
+  box-shadow:0 12px 30px rgba(0,0,0,0.2);
+}
+
+/* Footer attribution strip */
+.footer-strip{
+  display:flex;justify-content:space-between;align-items:center;padding:22px 24px;color:var(--muted);font-size:20px;margin-top:auto;
+}
+
+/* Background page */
+.bg-section{padding:var(--page-padding) 0}
+.bg-intro h2{font-family:'Playfair Display',serif;font-size:48px;margin:0 0 18px}
+.bg-intro p{max-width:900px;color:var(--muted);line-height:1.7}
+
+/* four value cards */
+.values{display:grid;grid-template-columns:repeat(4,1fr);gap:28px;margin-top:40px}
+.value{padding:28px;border-top:1px solid rgba(0,0,0,0.06)}
+.value h4{margin:0 0 12px;font-weight:600}
+.value p{color:var(--muted);font-size:14px;line-height:1.6}
+
+/* Visualisation section overview */
+.vis-section{padding:var(--page-padding) 0}
+.vis-row{display:grid;grid-template-columns:1fr 420px;gap:36px;align-items:start}
+.vis-row .left{padding-right:12px}
+.vis-list{margin-top:18px}
+.vis-list li{padding:18px 0;border-bottom:1px solid rgba(0,0,0,0.06);color:var(--text);list-style:none;position:relative;padding-left:56px}
+.vis-list li::before{content:counter(item) ;counter-increment:item;position:absolute;left:0;top:18px;font-size:28px;color:#bfbfbf}
+.vis-list{counter-reset:item}
+
+/* Buttons */
+.btn{
+  display:inline-block;padding:12px 22px;border-radius:26px;background:var(--accent);font-weight:600;margin-top:26px;
+  box-shadow:0 6px 14px rgba(0,0,0,0.06);
+}
+
+/* Dashboard / visualisation pages */
+.dashboard{
+  padding:var(--page-padding) 24px;
+  text-align:center;
+}
+.dashboard h1{font-family:'Playfair Display',serif;font-size:36px;margin:20px 0}
+.filter-row{display:flex;gap:10px;justify-content:center;margin:20px 0}
+.filter-pill{background:#efefef;padding:10px 14px;border-radius:6px;font-weight:600;color:#333}
+
+/* Example chart placeholder */
+.chart-placeholder{
+  margin:30px auto 60px;max-width:980px;height:420px;border-radius:8px;background:linear-gradient(180deg,#fff,#fafafa);
+  display:flex;align-items:center;justify-content:center;color:var(--muted);font-weight:600;border:1px solid rgba(0,0,0,0.04)
+}
+
+/* Team page */
+.team{padding:var(--page-padding) 0}
+.team-intro p{color:var(--muted);line-height:1.7;max-width:1100px}
+.team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:36px}
+.team-card{padding:24px;border-top:1px solid rgba(0,0,0,0.06)}
+.team-card h3{font-family:'Playfair Display',serif;font-weight:400;margin:0 0 10px;font-size:28px}
+.team-card small{display:block;color:var(--muted);margin-top:6px}
+
+/* full-bleed helper: 让区块跨出 container、铺满视口宽度 */
+.full-bleed {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  box-sizing: border-box;
+}
+
+/* 如果要在 full-bleed 区块内部仍限制内容宽度可再套一个 container-inner */
+.container-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* responsive */
+@media (max-width:1000px){
+  .hero .title{font-size:64px}
+  .hero .hero-image{height:340px}
+  .vis-row{grid-template-columns:1fr}
+  .values{grid-template-columns:repeat(2,1fr)}
+  .team-grid{grid-template-columns:1fr}
+  .navbar{padding:12px}
+}
+@media (max-width:600px){
+  .hero .title{font-size:44px}
+  .hero .hero-image{height:220px}
+  .values{grid-template-columns:1fr}
 }
