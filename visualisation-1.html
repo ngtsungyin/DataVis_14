@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>National Trends in Speeding Fines</title>
+  <link rel="stylesheet" href="css/styles.css">
+
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar container">
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="background.html">Background</a>
+        <a href="visualisation-section.html">Dashboard</a>
+        <a href="team.html">Team</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dashboard container">
+    <h1>National Trends in Speeding Fines (2008–2024)</h1>
+    <p style="max-width:900px;margin:0 auto;color:var(--muted)">
+      Explore how speeding fines have changed nationally and compare detection methods over time.
+    </p>
+
+    <div class="chart-controls">
+      <div class="control-group">
+        <label for="detection-toggle">Show Detection Methods:</label>
+        <div class="toggle-buttons">
+          <button class="toggle-btn active" data-method="all">All Methods</button>
+          <button class="toggle-btn" data-method="camera">Camera Only</button>
+          <button class="toggle-btn" data-method="police">Police Only</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="line-chart" class="chart-container">
+      <div class="chart-loading">Loading chart...</div>
+    </div>
+
+    <div class="chart-notes">
+      <p><strong>Note:</strong> Data shows total fines issued nationally. Police-issued fines data collection began consistently in 2017.</p>
+    </div>
+  </main>
+
+  <footer class="footer-strip">
+    <div>COS30045 DATA VISUALISATION</div>
+    <div>by Cherylynn, Ng Tsung Yin, Elisa</div>
+  </footer>
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="js/visualisation-1.js"></script>
+</body>
+</html>

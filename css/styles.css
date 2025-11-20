@@ -144,3 +144,528 @@ a{color:inherit;text-decoration:none}
   .hero .hero-image{height:220px}
   .values{grid-template-columns:1fr}
 }
+
+
+
+/* Sidebar styles */
+
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 280px;
+  height: 100vh;
+  background: white;
+  color: #333;
+  padding: 20px 0;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  border-right: 1px solid #eaeaea;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+  padding: 0 20px 20px;
+  border-bottom: 1px solid #eaeaea;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  color: #5e6b4b;
+  font-size: 18px;
+  font-family: 'Playfair Display', serif;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.sidebar-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #333;
+  transition: all 0.3s ease;
+}
+
+.sidebar-toggle:hover span {
+  background: #5e6b4b;
+}
+
+.sidebar-nav {
+  padding: 0 20px;
+}
+
+.nav-section {
+  margin-bottom: 25px;
+}
+
+.nav-section h4 {
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin: 0 0 12px 0;
+  font-weight: 600;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 15px;
+  color: #333;
+  text-decoration: none;
+  border-radius: 6px;
+  margin-bottom: 5px;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  border: 1px solid transparent;
+}
+
+.nav-link:hover {
+  background: #f8f9fa;
+  color: #5e6b4b;
+  border-color: #eaeaea;
+}
+
+.nav-link.active {
+  background: #5e6b4b;
+  color: white;
+  font-weight: 600;
+  border-color: #5e6b4b;
+}
+
+/* Main content adjustment for sidebar */
+.main-content.with-sidebar {
+  margin-left: 280px;
+  padding: 20px;
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+/* Mobile menu toggle button */
+.mobile-menu-toggle {
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background: #5e6b4b;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.mobile-menu-toggle span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: white;
+  transition: all 0.3s ease;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+  
+  .main-content.with-sidebar {
+    margin-left: 0;
+  }
+  
+  .mobile-menu-toggle {
+    display: flex;
+  }
+  
+  /* Hide desktop close button on mobile */
+  .sidebar-toggle {
+    display: none;
+  }
+}
+
+/* When sidebar is closed */
+.sidebar-closed .sidebar {
+  transform: translateX(-100%);
+}
+
+.sidebar-closed .main-content.with-sidebar {
+  margin-left: 0;
+}
+
+
+/*visualisation-1.html */
+
+/* Chart Styles */
+.chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #eaeaea;
+}
+
+.chart-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--muted);
+  font-style: italic;
+}
+
+.chart-controls {
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  border: 1px solid #eaeaea;
+}
+
+.control-group {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.control-group label {
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.toggle-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  border: 2px solid #5e6b4b;
+  background: white;
+  color: #5e6b4b;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.toggle-btn.active {
+  background: #5e6b4b;
+  color: white;
+}
+
+.toggle-btn:hover:not(.active) {
+  background: #f0f2eb;
+}
+
+/* D3.js Chart Styles */
+.line {
+  stroke-width: 2;
+  fill: none;
+}
+
+.dot {
+  stroke: white;
+  stroke-width: 1.5;
+  transition: r 0.2s ease;
+}
+
+.dot:hover {
+  r: 6;
+}
+
+.axis-label {
+  font-size: 12px;
+  fill: #666;
+}
+
+.legend text {
+  font-size: 12px;
+  fill: #333;
+}
+
+.chart-title {
+  font-size: 16px;
+  font-weight: bold;
+  fill: #333;
+}
+
+.tooltip {
+  position: absolute;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  border-radius: 4px;
+  pointer-events: none;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.chart-notes {
+  background: #fff9e6;
+  border-left: 4px solid #ffc107;
+  padding: 12px 16px;
+  margin: 20px 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 14px;
+}
+
+.chart-notes p {
+  margin: 0;
+  color: #856404;
+}
+
+
+
+/* visualisation-2.html */
+
+.q2-view-toggle-container {
+  text-align: center;
+  margin: 30px 0 20px 0;
+}
+
+.q2-view-buttons {
+  display: inline-flex;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 12px;
+  gap: 8px;
+  border: 2px solid #eaeaea;
+}
+
+.q2-view-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.3s ease;
+}
+
+.q2-view-btn.active {
+  background: white;
+  color: #5e6b4b;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.q2-view-btn:hover:not(.active) {
+  background: rgba(94, 107, 75, 0.1);
+  color: #5e6b4b;
+}
+
+.q2-view-icon {
+  font-size: 16px;
+}
+
+.q2-view-content {
+  display: none;
+}
+
+.q2-view-content.active {
+  display: block;
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.q2-chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #eaeaea;
+}
+
+.q2-controls {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 12px;
+  margin: 20px 0;
+  border: 1px solid #eaeaea;
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.q2-filter-buttons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.q2-filter-btn {
+  padding: 8px 16px;
+  border: 2px solid #eaeaea;
+  background: white;
+  color: #666;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.q2-filter-btn.active {
+  background: #5e6b4b;
+  color: white;
+  border-color: #5e6b4b;
+}
+
+.q2-filter-btn:hover:not(.active) {
+  background: #f0f2eb;
+  border-color: #5e6b4b;
+  color: #5e6b4b;
+}
+
+.q2-slider-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  flex-direction: column;
+}
+
+.q2-jurisdiction-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.q2-jurisdiction-checkboxes label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.2s ease;
+}
+
+.q2-jurisdiction-checkboxes label:hover {
+  background: rgba(94, 107, 75, 0.1);
+}
+
+/* Line chart specific styles */
+.q2-line {
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
+}
+
+.q2-dot {
+  stroke: white;
+  stroke-width: 2;
+  transition: all 0.2s ease;
+}
+
+.q2-dot:hover {
+  r: 6;
+  stroke-width: 3;
+}
+
+.q2-axis text {
+  font-size: 11px;
+  fill: #666;
+}
+
+.q2-axis path,
+.q2-axis line {
+  stroke: #ccc;
+}
+
+.axis-label {
+  font-size: 12px;
+  fill: #666;
+}
+
+/* Legend styles */
+.q2-legend {
+  transition: opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.q2-legend:hover {
+  opacity: 0.8;
+}
+
+/* Tooltip styles */
+.q2-tooltip {
+  position: absolute;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.85);
+  color: white;
+  border-radius: 6px;
+  pointer-events: none;
+  font-size: 13px;
+  line-height: 1.4;
+  z-index: 100;
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+.q2-notes {
+  background: #f0f7ff;
+  border-left: 4px solid #4dabf7;
+  padding: 16px 20px;
+  margin: 30px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+
+.q2-notes p {
+  margin: 0;
+  color: #1862ab;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .q2-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+  
+  .q2-view-buttons {
+    flex-direction: column;
+  }
+  
+  .q2-jurisdiction-checkboxes {
+    max-width: 100%;
+  }
+  
+  .q2-filter-buttons {
+    justify-content: flex-start;
+  }
+}
+
+
