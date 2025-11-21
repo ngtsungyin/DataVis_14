@@ -23,6 +23,16 @@
   <main class="dashboard container">
     <h1>What is the monthly seasonality in 2024, and how does it differ by detection method?</h1>
     <p style="max-width:900px;margin:0 auto;color:var(--muted)">Monthly Fines by Detection Method (2024)</p>
+    <div class="chart-controls" style="max-width:900px;margin:0 auto 24px auto;">
+      <div class="control-group" style="display:flex;align-items:center;gap:18px;">
+        <label style="font-weight:600;font-size:20px;">Show Detection Methods:</label>
+        <div class="toggle-buttons">
+          <button class="toggle-btn active" data-method="all">All Methods</button>
+          <button class="toggle-btn" data-method="camera">Camera Issued</button>
+          <button class="toggle-btn" data-method="police">Police Issued</button>
+        </div>
+      </div>
+    </div>
     <div id="line-chart" class="chart-container">
       <div class="chart-loading">Loading chart...</div>
     </div>
