@@ -1,185 +1,313 @@
-// visualisation4.js
-// Q4 — Age-group patterns (bar chart + heatmap) with per-group colors + legend
+// visualisation4.js — updated for: no-year control; bar-only / pie-only switching;
+// pie = full-year distribution (ignores age checkboxes); pie legend shows color+value+%
+// Keep file at: js/visualisation4.js
 
-d3.csv("data/visualisation4.csv").then(data => {
-  data.forEach(d => {
-    d.Total_Fines = +d.Total_Fines;
+const BAR_TARGET = "#barChart";
+const PIE_TARGET = "#pieChart";
+const AGE_CHECKBOX_CONTAINER = "#q4-age-checkboxes";
+
+// colour mapping for age groups
+const colorMap = {
+  "0-16": "#7FB069",
+  "17-25": "#F4A261",
+  "26-39": "#E76F51",
+  "40-64": "#9B2C2C",
+  "65 and over": "#A66DA6"
+};
+const defaultColor = "#6FA8DC";
+
+// tooltip
+const tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "dv-tooltip")
+  .style("position", "absolute")
+  .style("background", "#fff")
+  .style("padding", "10px")
+  .style("border-radius", "8px")
+  .style("box-shadow", "0 8px 30px rgba(0,0,0,0.12)")
+  .style("pointer-events", "none")
+  .style("display", "none")
+  .style("font-size", "14px");
+
+// load CSV
+d3.csv("data/visualisation4.csv").then(raw => {
+
+  const cols = raw.columns.map(c => c.toLowerCase());
+  const has2023 = cols.some(c => c.includes("2023"));
+  const has2024 = cols.some(c => c.includes("2024"));
+  const hasYear = cols.includes("year");
+  const hasTotal = cols.some(c => c.includes("total")) || cols.includes("total_fines");
+
+  const yearMap = { "2023": [], "2024": [] };
+
+  if (has2023 || has2024) {
+    raw.forEach(r => {
+      const age = r.AGE_GROUP || r.Age || r.age_group || r.age;
+      const v2023 = +(r.Fines_2023 ?? r["2023"] ?? r.fines_2023 ?? 0);
+      const v2024 = +(r.Fines_2024 ?? r["2024"] ?? r.fines_2024 ?? 0);
+      if (age) {
+        yearMap["2023"].push({ AGE_GROUP: age, value: v2023 });
+        yearMap["2024"].push({ AGE_GROUP: age, value: v2024 });
+      }
+    });
+
+  } else if (hasYear && hasTotal) {
+
+    const agg = {};
+    raw.forEach(r => {
+      const age = r.AGE_GROUP || r.Age || r.age_group || r.age;
+      const yr = String(r.YEAR || r.year || r.Year || "");
+      const val = +(r.Total_Fines || r.total_fines || r.Total || r.TotalFines || 0);
+      if (!age || !yr) return;
+      agg[yr] = agg[yr] || {};
+      agg[yr][age] = (agg[yr][age] || 0) + val;
+    });
+
+    ["2023","2024"].forEach(yr => {
+      if (agg[yr]) {
+        for (const age in agg[yr]) yearMap[yr].push({ AGE_GROUP: age, value: agg[yr][age] });
+      }
+    });
+
+  } else if (hasTotal) {
+    raw.forEach(r => {
+      const age = r.AGE_GROUP || r.Age || r.age_group || r.age;
+      const val = +(r.Total_Fines || r.total_fines || r.Total || r.TotalFines || 0);
+      if (age) yearMap["2023"].push({ AGE_GROUP: age, value: val });
+    });
+
+  } else {
+    raw.forEach(r => {
+      const age = r.AGE_GROUP || r.Age || r.age_group || r.age;
+      const numericCols = raw.columns.filter(c => !["AGE_GROUP","Age","age_group","age"].includes(c));
+      const v = numericCols.length ? +r[numericCols[0]] : 0;
+      if (age) yearMap["2023"].push({ AGE_GROUP: age, value: v });
+    });
+  }
+
+  // normalise age groups
+  const ageSet = new Set();
+  Object.values(yearMap).forEach(arr => arr.forEach(d => ageSet.add(d.AGE_GROUP)));
+  const ageGroups = Array.from(ageSet);
+
+  ["2023","2024"].forEach(yr => {
+    const m = new Map(yearMap[yr].map(d => [d.AGE_GROUP, d.value]));
+    yearMap[yr] = ageGroups.map(age => ({ AGE_GROUP: age, value: m.get(age) || 0 }));
   });
 
-  const ages = data.map(d => d.AGE_GROUP);
-  const values = data.map(d => d.Total_Fines);
-
-  // ===== BAR CHART =====
-  const margin = { top: 30, right: 20, bottom: 120, left: 80 };
-  const width = 520 - margin.left - margin.right;
-  const height = 420 - margin.top - margin.bottom;
-
-  const svgBar = d3.select("#barChart")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom + 80) // extra space for legend
-    .append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-  const x = d3.scaleBand()
-    .domain(ages)
-    .range([0, width])
-    .padding(0.25);
-
-  const y = d3.scaleLinear()
-    .domain([0, d3.max(values)])
-    .range([height, 0])
-    .nice();
-
-  svgBar.append("g")
-    .attr("transform", `translate(0,${height})`)
-    .call(d3.axisBottom(x))
-    .selectAll("text")
-    .attr("transform", "translate(0,8) rotate(-0)")
-    .style("text-anchor", "middle");
-
-  svgBar.append("g")
-    .call(d3.axisLeft(y).ticks(6).tickFormat(d3.format(",")));
-
-  // color mapping (distinct color per age group)
-  const colorMap = {
-    "0-16": "#7FB069",
-    "17-25": "#F4A261",
-    "26-39": "#E76F51",
-    "40-64": "#9B2C2C",
-    "65 and over": "#A66DA6"
-  };
-  // fallback for any unexpected age group
-  const colorScale = d => colorMap[d] || "#6FA8DC";
-
-  // Tooltip
-  const tooltip = d3.select("body")
-    .append("div")
-    .attr("class", "dv-tooltip")
-    .style("position", "absolute")
-    .style("background", "#fff")
-    .style("padding", "10px")
-    .style("border-radius", "8px")
-    .style("box-shadow", "0 8px 30px rgba(0,0,0,0.12)")
-    .style("pointer-events", "none")
-    .style("display", "none")
-    .style("font-size", "14px");
-
-  svgBar.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", d => x(d.AGE_GROUP))
-    .attr("width", x.bandwidth())
-    .attr("y", d => y(d.Total_Fines))
-    .attr("height", d => height - y(d.Total_Fines))
-    .attr("fill", d => colorScale(d.AGE_GROUP))
-    .style("cursor", "pointer")
-    .on("mousemove", (event, d) => {
-      tooltip.style("display", "block")
-        .html(`
-          <strong style="font-size:15px">${d.AGE_GROUP}</strong>
-          <div style="margin-top:6px">Fines: ${d3.format(",")(d.Total_Fines)}</div>
-        `)
-        .style("left", (event.pageX + 14) + "px")
-        .style("top", (event.pageY + 14) + "px");
-    })
-    .on("mouseout", () => tooltip.style("display", "none"));
-
-  // value labels on bars (optional)
-  svgBar.selectAll(".val-label")
-    .data(data)
-    .enter()
-    .append("text")
-    .attr("class", "val-label")
-    .attr("x", d => x(d.AGE_GROUP) + x.bandwidth() / 2)
-    .attr("y", d => y(d.Total_Fines) - 8)
-    .attr("text-anchor", "middle")
-    .text(d => d3.format(",")(d.Total_Fines))
-    .style("font-size", "12px")
-    .style("fill", "#333");
-
-  // ===== LEGEND =====
-  const legend = svgBar.append("g")
-    .attr("transform", `translate(0, ${height + 40})`);
-
-  const legendItemSize = 14;
-  const legendSpacing = 18;
-
-  ages.forEach((age, i) => {
-    const g = legend.append("g")
-      .attr("transform", `translate(${i * 120}, 0)`);
-
-    g.append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", legendItemSize)
-      .attr("height", legendItemSize)
-      .attr("fill", colorScale(age))
-      .attr("rx", 3);
-
-    g.append("text")
-      .attr("x", legendItemSize + 8)
-      .attr("y", legendItemSize - 2)
-      .text(age)
-      .style("font-size", "13px")
-      .style("fill", "#333");
+  // build checkboxes
+  const cbContainer = d3.select(AGE_CHECKBOX_CONTAINER);
+  ageGroups.forEach(age => {
+    const id = `q4-age-${age.replace(/\s+/g,'_')}`;
+    const label = cbContainer.append("label").attr("class","q3-pill").style("margin-right","8px");
+    label.append("input")
+      .attr("type","checkbox")
+      .attr("id", id)
+      .property("checked", true);
+    label.append("span").text(" " + age);
   });
 
-  // ===== HEATMAP =====
-  const hmW = 280, hmH = 360;
-  const rowH = hmH / ages.length;
+  let selectedAges = new Set(ageGroups);
+  let currentView = "bar";
+  const defaultBarYear = "2023";
 
-  const svgHM = d3.select("#heatmap")
-    .append("svg")
-    .attr("width", hmW + 120)
-    .attr("height", hmH + 80)
-    .append("g")
-    .attr("transform", "translate(60,40)");
+  ageGroups.forEach(age => {
+    const id = `q4-age-${age.replace(/\s+/g,'_')}`;
+    d3.select(`#${CSS.escape(id)}`).on("change", function() {
+      if (this.checked) selectedAges.add(age);
+      else selectedAges.delete(age);
+      if (currentView === "bar") updateBar();
+    });
+  });
 
-  // color scale for heatmap (use same palette but gradient based on value)
-  const hmColor = d3.scaleLinear()
-    .domain([0, d3.max(values)])
-    .range(["#fff5f0", "#7f0000"]);
+  d3.select("#q4-btn-bar").on("click", () => {
+    currentView = "bar";
+    d3.selectAll(".q3-view-btn").classed("active", false);
+    d3.select("#q4-btn-bar").classed("active", true);
 
-  svgHM.selectAll("rect")
-    .data(data)
-    .enter()
-    .append("rect")
-    .attr("x", 0)
-    .attr("y", (d, i) => i * rowH)
-    .attr("width", hmW)
-    .attr("height", rowH - 8)
-    .attr("fill", d => hmColor(d.Total_Fines))
-    .style("cursor", "pointer")
-    .on("mousemove", (event, d) => {
-      tooltip.style("display", "block")
-        .html(`
-          <strong style="font-size:15px">${d.AGE_GROUP}</strong>
-          <div style="margin-top:6px">Fines: ${d3.format(",")(d.Total_Fines)}</div>
-        `)
-        .style("left", (event.pageX + 14) + "px")
-        .style("top", (event.pageY + 14) + "px");
-    })
-    .on("mouseout", () => tooltip.style("display", "none"));
+    d3.select("#barChart").style("display","block");
+    d3.select("#pieChart").style("display","none");
 
-  svgHM.selectAll("text")
-    .data(data)
-    .enter()
-    .append("text")
-    .attr("x", -14)
-    .attr("y", (d, i) => i * rowH + rowH / 2)
-    .attr("text-anchor", "end")
-    .attr("dominant-baseline", "middle")
-    .text(d => d.AGE_GROUP)
-    .style("font-size", "14px");
+    enableAgeCheckboxes(true);
+    updateBar();
+  });
 
-  svgHM.append("text")
-    .attr("x", hmW / 2)
-    .attr("y", -15)
-    .attr("text-anchor", "middle")
-    .style("font-size", "16px")
-    .style("font-weight", "600")
-    .text("Heatmap — Age Groups");
+  d3.select("#q4-btn-pie").on("click", () => {
+    currentView = "pie";
+    d3.selectAll(".q3-view-btn").classed("active", false);
+    d3.select("#q4-btn-pie").classed("active", true);
 
+    d3.select("#barChart").style("display","none");
+    d3.select("#pieChart").style("display","block");
+
+    enableAgeCheckboxes(false);
+    updatePie();
+  });
+
+  function enableAgeCheckboxes(enabled) {
+    ageGroups.forEach(age => {
+      const id = `q4-age-${age.replace(/\s+/g,'_')}`;
+      d3.select(`#${CSS.escape(id)}`).property("disabled", !enabled);
+      d3.select(`#${CSS.escape(id)}`).node().parentElement.style.opacity = enabled ? 1 : 0.55;
+    });
+  }
+
+  drawBarChart(yearMap[defaultBarYear]);
+  drawPieChart(combineAllYearsForPie(yearMap));
+  d3.select("#q4-btn-bar").dispatch("click");
+
+  function combineAllYearsForPie(yearMap) {
+    const totals = {};
+    Object.keys(yearMap).forEach(yr => {
+      yearMap[yr].forEach(d => totals[d.AGE_GROUP] = (totals[d.AGE_GROUP] || 0) + d.value);
+    });
+    return ageGroups.map(age => ({ AGE_GROUP: age, value: totals[age] || 0 }));
+  }
+
+  function updateBar() {
+    const data = yearMap[defaultBarYear] || [];
+    drawBarChart(data);
+  }
+
+  function updatePie() {
+    const data = combineAllYearsForPie(yearMap);
+    drawPieChart(data);
+  }
+
+  // -------------------------------------------------------
+  // BAR CHART (ENLARGED VERSION)
+  // -------------------------------------------------------
+  function drawBarChart(dataForYear) {
+    d3.select(BAR_TARGET).selectAll("*").remove();
+
+    const filtered = dataForYear.filter(d => selectedAges.has(d.AGE_GROUP));
+
+    const margin = { top: 28, right: 20, bottom: 120, left: 80 };
+    const width = 820 - margin.left - margin.right;     // ← enlarged width
+    const height = 520 - margin.top - margin.bottom;    // ← enlarged height
+
+    const svgBar = d3.select(BAR_TARGET)
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom + 80)
+      .append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
+
+    const x = d3.scaleBand()
+      .domain(filtered.map(d => d.AGE_GROUP))
+      .range([0, width]).padding(0.28);
+
+    const y = d3.scaleLinear()
+      .domain([0, d3.max(filtered, d => d.value) || 1])
+      .range([height, 0]).nice();
+
+    svgBar.append("g")
+      .attr("transform", `translate(0,${height})`)
+      .call(d3.axisBottom(x));
+
+    svgBar.append("g")
+      .call(d3.axisLeft(y).ticks(6).tickFormat(d3.format(",")));
+
+    svgBar.selectAll("rect")
+  .data(filtered)
+  .enter()
+  .append("rect")
+  .attr("x", d => x(d.AGE_GROUP))
+  .attr("width", x.bandwidth())
+  .attr("y", d => y(d.value))
+  .attr("height", d => height - y(d.value))
+  .attr("fill", d => colorMap[d.AGE_GROUP] || defaultColor)
+  .style("cursor", "pointer")
+  .on("mousemove", (event, d) => {
+    tooltip.style("display", "block")
+      .html(`<strong>${d.AGE_GROUP}</strong><div style="margin-top:6px">Fines: ${d3.format(",")(d.value)}</div>`)
+      .style("left", (event.pageX + 14) + "px")
+      .style("top", (event.pageY + 14) + "px");
+  })
+  .on("mouseout", () => tooltip.style("display","none"));
+
+
+    svgBar.selectAll(".val-label")
+      .data(filtered)
+      .enter()
+      .append("text")
+      .attr("class","val-label")
+      .attr("x", d => x(d.AGE_GROUP) + x.bandwidth()/2)
+      .attr("y", d => y(d.value) - 8)
+      .attr("text-anchor","middle")
+      .text(d => d3.format(",")(d.value))
+      .style("font-size","12px")
+      .style("fill","#333");
+
+    const legend = svgBar.append("g").attr("transform", `translate(0, ${height + 40})`);
+    filtered.forEach((d, i) => {
+      const g = legend.append("g").attr("transform", `translate(${i*120},0)`);
+      g.append("rect").attr("width",14).attr("height",14).attr("fill", colorMap[d.AGE_GROUP] || defaultColor).attr("rx",3);
+      g.append("text").attr("x",18).attr("y",12).text(d.AGE_GROUP).style("font-size","13px");
+    });
+  }
+
+  // -------------------------------------------------------
+  // PIE CHART (unchanged)
+  // -------------------------------------------------------
+  function drawPieChart(dataFull) {
+
+    d3.select(PIE_TARGET).selectAll("*").remove();
+
+    const total = d3.sum(dataFull, d => d.value) || 1;
+    const pieData = dataFull.map(d => ({ AGE_GROUP: d.AGE_GROUP, value: d.value }));
+
+    const w = 360, h = 360, r = Math.min(w,h)/2 - 10;
+    const svgPie = d3.select(PIE_TARGET)
+      .append("svg")
+      .attr("width", w + 40)
+      .attr("height", h + 40)
+      .append("g")
+      .attr("transform", `translate(${(w/2)+20}, ${(h/2)+10})`);
+
+    const pie = d3.pie().value(d => d.value).sort(null);
+    const arc = d3.arc().innerRadius(0).outerRadius(r);
+    const arcLabel = d3.arc().innerRadius(r*0.6).outerRadius(r*0.9);
+
+    const arcs = svgPie.selectAll("arc").data(pie(pieData)).enter();
+
+    arcs.append("path")
+      .attr("d", arc)
+      .attr("fill", d => colorMap[d.data.AGE_GROUP] || defaultColor)
+      .attr("stroke","#fff")
+      .attr("stroke-width",1.2)
+      .on("mousemove",(event,d)=>{
+        const pct = total?((d.data.value/total)*100).toFixed(1)+"%":"0%";
+        tooltip.style("display","block")
+          .html(`<strong>${d.data.AGE_GROUP}</strong><div style="margin-top:6px">Fines: ${d3.format(",")(d.data.value)} (${pct})</div>`)
+          .style("left",(event.pageX+14)+"px")
+          .style("top",(event.pageY+14)+"px");
+      })
+      .on("mouseout",()=>tooltip.style("display","none"));
+
+    arcs.append("text")
+      .attr("transform", d => `translate(${arcLabel.centroid(d)})`)
+      .attr("text-anchor","middle")
+      .style("font-size","12px")
+      .style("fill","#fff")
+      .style("font-weight","700")
+      .text(d=>{
+        const pct = total?(d.data.value/total*100):0;
+        return d.data.value>0?`${pct.toFixed(1)}%`:"";
+      });
+
+    const legend = svgPie.append("g").attr("transform",`translate(${r+20},${-r})`);
+    pieData.forEach((d,i)=>{
+      const pct = total?((d.value/total)*100).toFixed(1)+"%":"0%";
+      const g = legend.append("g").attr("transform",`translate(0,${i*26})`);
+      g.append("rect").attr("width",14).attr("height",14).attr("fill",colorMap[d.AGE_GROUP]||defaultColor).attr("rx",2);
+      g.append("text").attr("x",18).attr("y",12)
+        .text(`${d.AGE_GROUP} · ${d3.format(",")(d.value)} (${pct})`)
+        .style("font-size","13px");
+    });
+  }
+
+}).catch(err=>{
+  console.error("Failed to load visualisation4.csv:", err);
+  d3.select(BAR_TARGET).append("div").text("Failed to load data/visualisation4.csv");
 });

@@ -19,33 +19,42 @@
     </nav>
   </header>
 
-  <main class="dashboard container-inner">
-    <h1>Interactive Speeding Enforcement Dashboard</h1>
-<p style="max-width:900px;margin:0 auto;color:var(--muted)">
-  Explore national and jurisdiction-level patterns in speeding fines through focused visual analyses. 
-  Click a topic below to open its interactive visualisation.
-</p>
-
-<div class="vis-menu">
-  <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
-  <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
-  <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
-  <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
-  <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
-  <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
-</div>
-
-    <h2 style="text-align:left;margin-top:28px;font-family:'Playfair Display',serif;font-size: 40px;">
-      Q4 — What are the age-group patterns of speeding fines in 2023 and 2024?
-    </h2>
-    <p style="text-align:left;color:var(--muted)">
-      The visualisation shows two complementary views: a bar chart comparing total fines across age groups,
-      and a heatmap highlighting relative severity among groups.
+  <main class="dashboard container">
+    <h1>What are the age-group patterns of speeding fines?</h1>
+    <p style="max-width:900px;margin:0 auto;color:var(--muted)">
+      Explore age-group patterns of speeding fines. Use the controls to pick the year and filter age groups (bar chart). The pie chart always shows the full-year distribution and does not apply age-group filters.
     </p>
 
-    <div id="chart-container" style="justify-content: center;display:flex;gap:60px;margin-top:40px;">
-      <div id="barChart"></div>
-      <div id="heatmap"></div>
+    <!-- Top controls -->
+    <div class="q3-top-controls" style="margin-top:22px;">
+      <div class="q3-view-toggle-container">
+        <div class="q3-view-buttons">
+          <button id="q4-btn-bar" class="q3-view-btn active" data-view="bar">Bar Chart</button>
+          <button id="q4-btn-pie" class="q3-view-btn" data-view="pie">Pie Chart</button>
+        </div>
+      </div>
+
+      <div class="q3-controls" style="align-items:center;">
+        <div class="q3-filter-buttons" style="margin-left:18px;">
+          <label style="font-weight:600; margin-right: 8px;">Age-group filter:</label>
+          <span id="q4-age-checkboxes">
+            <!-- JS will populate checkboxes here based on CSV age groups -->
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Chart area -->
+    <div id="q4-chart-wrap" class="q2-chart-container" style="margin-top:18px;">
+      <div id="q4-charts" style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap;justify-content:center;">
+        <div id="barChart" style="min-width:420px;"></div>
+        <div id="pieChart" style="min-width:360px;"></div>
+      </div>
+    </div>
+
+    <!-- Note (colored variant) -->
+    <div class="q4-notes">
+      <p><strong>Note:</strong> Bar chart respects selected age groups and the chosen year (use the checkboxes and year select). Pie chart always displays the full-year proportional breakdown (unfiltered) for clarity.</p>
     </div>
 
   </main>
