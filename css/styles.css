@@ -629,44 +629,170 @@ p{
 /* visualisation2.html */
 
 /* Choropleth Map */
-  .q2-tooltip {
-    position: absolute;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    border-radius: 4px;
-    pointer-events: none;
-    font-size: 12px;
-    z-index: 1000;
-  }
+.q2-chart-container {
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  margin: 20px 0;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border: 1px solid #eaeaea;
+  overflow: visible !important;
   
-  .q2-view-btn.active {
-    background-color: #1f77b4;
-    color: white;
-  }
-  
-  .q2-filter-btn.active {
-    background-color: #2ca02c;
-    color: white;
-  }
-  
-  .q2-legend-item {
-    cursor: pointer;
-  }
-  
-  .q2-legend-item:hover {
-    opacity: 0.7;
-  }
-  
-  .state-boundary {
-    fill: none;
-    stroke: #fff;
-    stroke-width: 1px;
-  }
-  
-  .q2-map-container {
-    position: relative;
-  }
+}
+
+.map-container {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  position: relative;
+  overflow: visible;
+}
+
+#q2-map {
+  width: 100%;
+  height: 100%;
+  min-height: 500px;
+  overflow: visible;
+}
+
+#q2-map svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.jurisdiction-table th:nth-child(2),
+.jurisdiction-table td:nth-child(2) {
+    text-align: center;
+}
+
+.jurisdiction-table th,
+.jurisdiction-table td {
+    border-right: 1px solid #eaeaea;
+}
+
+.jurisdiction-table th:last-child,
+.jurisdiction-table td:last-child {
+    border-right: none;
+}
+
+.jurisdiction-table tr:hover {
+    background-color: #f0f7ff;
+    border-left: 3px solid #1f77b4;
+    font-weight: 600;
+}
+
+.australia-state:hover {
+    stroke-width: 4px;
+    stroke: #ff6b6b;
+    filter: brightness(1.2);
+    transform: scale(1.02);
+}
+
+.jurisdiction-table tr:hover ~ .australia-state {
+    stroke-width: 4px;
+    stroke: #ff6b6b;
+    filter: brightness(1.2);
+}
+
+/* View-specific controls */
+.q2-line-controls {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.q2-map-controls {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Hide both controls by default */
+.q2-controls .q2-line-controls,
+.q2-controls .q2-map-controls {
+  display: none;
+}
+
+/* Show line controls when line chart view is active */
+.line-view-active .q2-line-controls {
+  display: flex;
+}
+
+/* Show map controls when map view is active */
+.map-view-active .q2-map-controls {
+  display: flex;
+}
+
+/* Year buttons styling */
+.year-selection-container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #f8f9fa;
+  padding: 15px 20px;
+  border-radius: 10px;
+  border: 1px solid #eaeaea;
+}
+
+.year-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.year-btn {
+  padding: 8px 16px;
+  border: 2px solid #5e6b4b;
+  background: white;
+  color: #5e6b4b;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.year-btn:hover {
+  background: #f0f2eb;
+  transform: translateY(-2px);
+}
+
+.year-btn.active {
+  background: #5e6b4b;
+  color: white;
+  box-shadow: 0 4px 8px rgba(94, 107, 75, 0.3);
+}
+
+/* Vertical color legend */
+.vertical-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.vertical-gradient {
+  width: 20px;
+  height: 150px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.legend-labels {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 150px;
+  font-size: 11px;
+  color: #666;
+}
+
 
 .q2-view-toggle-container {
   text-align: center;
@@ -746,28 +872,28 @@ p{
   flex-wrap: wrap;
 }
 
-.q2-filter-buttons {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
 .q2-filter-btn {
   padding: 8px 16px;
-  border: 2px solid #eaeaea;
+  border: 2px solid #5e6b4b;
   background: white;
-  color: #666;
-  border-radius: 6px;
+  color: #5e6b4b;
+  border-radius: 20px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  min-width: 60px;
+}
+
+.q2-filter-btn:hover {
+  background: #f0f2eb;
+  transform: translateY(-2px);
 }
 
 .q2-filter-btn.active {
-  background: #5e6b4b;
-  color: white;
-  border-color: #5e6b4b;
+  background: #5e6b4b !important;
+  color: white !important;
+  border-color: #5e6b4b !important;
 }
 
 .q2-filter-btn:hover:not(.active) {
