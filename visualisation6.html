@@ -1,0 +1,40 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Monthly Fines by Detection Method (2024)</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+
+  <header class="site-header">
+    <nav class="navbar container">
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="background.html">Background</a>
+        <a href="visualisation-section.html">Dashboard</a>
+        <a href="team.html">Team</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="dashboard container centered-page">
+    <h1 style="margin-bottom:8px;font-size:2rem;font-weight:700;text-align:center;">Where are fines concentrated by location type, and how has this changed from 2008 to 2024?</h1>
+    <p style="max-width:900px;margin:0 0 24px 0;color:var(--muted);text-align:center;">Heatmap of fines by location type and year</p>
+    <div id="heatmap-chart" class="chart-container" style="max-width:1300px;margin:0 auto 32px auto;"></div>
+    <div class="chart-note" style="max-width:900px;margin:0 auto 48px auto;padding:18px 24px;background:#f4faff;border-left:4px solid #e53e3e;color:#222;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+      <strong>Note:</strong> This heatmap shows the distribution of speeding fines across different location types and years. Darker colors indicate higher numbers of fines. Use this chart to compare how fine concentrations have shifted between regions from 2008 to 2024.
+    </div>
+  </main>
+
+  <footer class="footer-strip">
+    <div>COS30045 DATA VISUALISATION</div>
+    <div>by Cherylynn, Ng Tsung Yin, Elisa</div>
+  </footer>
+
+  <script src="js/visualisation6.js"></script>
+</body>
+</html>

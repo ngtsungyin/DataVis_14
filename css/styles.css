@@ -192,6 +192,13 @@ p{
   text-align:center;
 }
 
+/* Page-specific helper: center the dashboard column for single visualisation pages */
+.centered-page{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+
 .dashboard h1{
   font-family:'Playfair Display',serif;
   font-size:48px;   /* ⭐ bigger */

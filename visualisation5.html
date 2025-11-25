@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -15,21 +16,37 @@
         <a href="background.html">Background</a>
         <a href="visualisation-section.html">Dashboard</a>
         <a href="team.html">Team</a>
-        <a href="visualisation5.html" class="active">Vis5</a>
       </div>
     </nav>
   </header>
-  <main>
-    <section class="vis-section">
-      <h1>Monthly Fines by Detection Method (2024)</h1>
-      <div id="vis5-chart" style="display:flex;justify-content:center;align-items:center;margin-bottom:24px;"></div>
-      <div id="vis5-legend" style="display:flex;justify-content:center;align-items:center;margin-bottom:120px;"></div>
-    </section>
+
+  <main class="dashboard container">
+    <h1>What is the monthly seasonality in 2024, and how does it differ by detection method?</h1>
+    <p style="max-width:900px;margin:0 auto;color:var(--muted)">Monthly Fines by Detection Method (2024)</p>
+    <div class="chart-controls" style="max-width:900px;margin:0 auto 24px auto;">
+      <div class="control-group" style="display:flex;align-items:center;gap:18px;">
+        <label style="font-weight:600;font-size:20px;">Show Detection Methods:</label>
+        <div class="toggle-buttons">
+          <button class="toggle-btn active" data-method="all">All Methods</button>
+          <button class="toggle-btn" data-method="camera">Camera Issued</button>
+          <button class="toggle-btn" data-method="police">Police Issued</button>
+        </div>
+      </div>
+    </div>
+    <div id="line-chart" class="chart-container">
+      <div class="chart-loading">Loading chart...</div>
+    </div>
+    <div id="vis5-legend" style="display:flex;justify-content:center;align-items:center;margin-bottom:120px;"></div>
+      <div class="chart-note" style="max-width:900px;margin:0 auto 48px auto;padding:18px 24px;background:#f4faff;border-left:4px solid #3b82f6;color:#222;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
+        <strong>Note:</strong> This chart shows the monthly fines issued in 2024, separated by detection method. Use the buttons above to filter by camera-issued or police-issued fines, or view all methods together. Observe how the seasonality and trends differ between detection methods across the months.
+      </div>
   </main>
+
   <footer class="footer-strip">
     <div>COS30045 DATA VISUALISATION</div>
     <div>by Cherylynn, Ng Tsung Yin, Elisa</div>
   </footer>
+
   <script src="js/visualisation5.js"></script>
 </body>
 </html>
