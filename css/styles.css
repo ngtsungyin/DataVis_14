@@ -628,6 +628,46 @@ p{
 
 /* visualisation2.html */
 
+/* Choropleth Map */
+  .q2-tooltip {
+    position: absolute;
+    padding: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    border-radius: 4px;
+    pointer-events: none;
+    font-size: 12px;
+    z-index: 1000;
+  }
+  
+  .q2-view-btn.active {
+    background-color: #1f77b4;
+    color: white;
+  }
+  
+  .q2-filter-btn.active {
+    background-color: #2ca02c;
+    color: white;
+  }
+  
+  .q2-legend-item {
+    cursor: pointer;
+  }
+  
+  .q2-legend-item:hover {
+    opacity: 0.7;
+  }
+  
+  .state-boundary {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 1px;
+  }
+  
+  .q2-map-container {
+    position: relative;
+  }
+
 .q2-view-toggle-container {
   text-align: center;
   margin: 30px 0 20px 0;

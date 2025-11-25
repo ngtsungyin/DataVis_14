@@ -5,6 +5,7 @@ const height = 500 - margin.top - margin.bottom;
 
 let data = [];
 let activeMethods = ['Camera_Issued', 'Police_Issued', 'Others', 'Unknown'];
+let currentSvg = null;
 
 // Color scale for detection methods
 const colorScale = d3.scaleOrdinal()
@@ -16,7 +17,7 @@ const methodLabels = {
   'Camera_Issued': 'Camera Issued',
   'Police_Issued': 'Police Issued',
   'Others': 'Other Methods',
-  'Unknown': 'Unknown Methods'
+  'Unknown': 'Unknown'
 };
 
 // Initialize the chart
@@ -47,13 +48,17 @@ async function loadData() {
 
 // Create the line chart
 function createChart() {
+  // Clear previous chart
+  d3.select('#line-chart').html('');
+  
   const svg = d3.select('#line-chart')
-    .html('') // Clear loading message
     .append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     .append('g')
     .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  currentSvg = svg;
 
   // Scales
   const xScale = d3.scaleLinear()
@@ -61,7 +66,13 @@ function createChart() {
     .range([0, width]);
 
   const yScale = d3.scaleLinear()
-    .domain([0, d3.max(data, d => Math.max(d.Camera_Issued, d.Police_Issued, d.Others, d.Unknown)) * 1.1])
+    .domain([0, d3.max(data, d => {
+      let maxValue = 0;
+      activeMethods.forEach(method => {
+        if (d[method] > maxValue) maxValue = d[method];
+      });
+      return maxValue;
+    }) * 1.1])
     .range([height, 0]);
 
   // Lines
@@ -133,7 +144,7 @@ function createChart() {
     .data(activeMethods)
     .enter().append('g')
     .attr('class', 'legend')
-    .attr('transform', (d, i) => `translate(${width - 150}, ${i * 25})`);
+    .attr('transform', (d, i) => `translate(${width - 30}, ${i * 25})`);
 
   legend.append('rect')
     .attr('x', 0)
@@ -161,28 +172,34 @@ function createChart() {
   // Tooltip
   const tooltip = d3.select('body').append('div')
     .attr('class', 'tooltip')
-    .style('opacity', 0);
+    .style('opacity', 0)
+    .style('position', 'absolute')
+    .style('background', 'rgba(0, 0, 0, 0.8)')
+    .style('color', 'white')
+    .style('padding', '8px')
+    .style('border-radius', '4px')
+    .style('font-size', '12px')
+    .style('pointer-events', 'none');
 
-  // Add hover effects - SIMPLIFIED VERSION
+  // Add hover effects
   svg.selectAll('.dot')
     .on('mouseover', function(event, d) {
-      // Find which method this dot belongs to by checking its Y position
-      const yPos = d3.select(this).attr('cy');
-      const xPos = d3.select(this).attr('cx');
+      const xPos = parseFloat(d3.select(this).attr('cx'));
+      const yPos = parseFloat(d3.select(this).attr('cy'));
       
-      // Find which method has this value at this year
+      // Find which method this dot belongs to
       let methodFound = '';
       let valueFound = 0;
       
       activeMethods.forEach(method => {
-        if (Math.abs(yScale(d[method]) - parseFloat(yPos)) < 1) {
+        if (Math.abs(yScale(d[method]) - yPos) < 1) {
           methodFound = method;
           valueFound = d[method];
         }
       });
       
       if (methodFound) {
-        tooltip.transition().duration(200).style('opacity', .9);
+        tooltip.transition().duration(200).style('opacity', 0.9);
         tooltip.html(`
           <strong>${d.year}</strong><br/>
           ${methodLabels[methodFound]}: ${d3.format(',')(valueFound)} fines
@@ -194,6 +211,7 @@ function createChart() {
     .on('mouseout', function() {
       tooltip.transition().duration(500).style('opacity', 0);
     });
+}
 
 // Setup interactive controls
 function setupInteractions() {
@@ -204,7 +222,7 @@ function setupInteractions() {
     d3.selectAll('.toggle-btn').classed('active', false);
     d3.select(this).classed('active', true);
     
-    // Update visible lines
+    // Update visible lines based on selection
     if (method === 'all') {
       activeMethods = ['Camera_Issued', 'Police_Issued', 'Others', 'Unknown'];
     } else if (method === 'camera') {
@@ -216,7 +234,6 @@ function setupInteractions() {
     // Recreate chart with new filters
     createChart();
   });
-}
 }
 
 // Initialize when page loads

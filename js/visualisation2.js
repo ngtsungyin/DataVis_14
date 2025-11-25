@@ -2,6 +2,10 @@
 let jurisdictionData = [];
 let selectedJurisdictions = ['NSW', 'VIC', 'QLD', 'WA', 'SA', 'TAS', 'NT', 'ACT'];
 
+// Map-related variables
+let australiaTopoJSON = null;
+let currentMapYear = 2024;
+
 // Color scheme for jurisdictions
 const jurisdictionColors = {
   'NSW': '#1f77b4', 'VIC': '#ff7f0e', 'QLD': '#2ca02c', 
@@ -18,6 +22,7 @@ const jurisdictionNames = {
 // Initialize the visualization
 async function initQ2() {
   await loadJurisdictionData();
+  await loadMapData(); // Load map data
   createLineChart();
   setupInteractions();
 }
@@ -283,6 +288,11 @@ function setupInteractions() {
     // Show/hide views
     d3.selectAll('.q2-view-content').classed('active', false);
     d3.select(`#q2-${view}-view`).classed('active', true);
+    
+    // Initialize map if switching to map view
+    if (view === 'map') {
+      createChoroplethMap();
+    }
   });
   
   // Quick filter buttons
@@ -328,6 +338,239 @@ function setupInteractions() {
     
     updateButtonStates();
     updateLineChart();
+  });
+}
+
+
+// Load Australia map data
+async function loadMapData() {
+  try {
+    // Using a reliable Australia GeoJSON source
+    const response = await fetch('https://raw.githubusercontent.com/tonywr71/GeoJson-Data/master/australian-states.json');
+    australiaTopoJSON = await response.json();
+    console.log('Australia map data loaded successfully');
+  } catch (error) {
+    console.error('Error loading map data:', error);
+    // Create a simple fallback map
+    createSimplifiedAustraliaMap();
+  }
+}
+
+// Fallback function for simplified Australia map
+function createSimplifiedAustraliaMap() {
+  console.log('Creating simplified Australia map');
+  // Simple bounding boxes for each state/territory
+  australiaTopoJSON = {
+    type: "FeatureCollection",
+    features: [
+      { type: "Feature", properties: { STATE_NAME: "New South Wales", STATE_CODE: "NSW" }, geometry: { type: "Polygon", coordinates: [[[141, -37.5], [154, -37.5], [154, -28], [141, -28], [141, -37.5]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Victoria", STATE_CODE: "VIC" }, geometry: { type: "Polygon", coordinates: [[[141, -39.5], [150, -39.5], [150, -34], [141, -34], [141, -39.5]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Queensland", STATE_CODE: "QLD" }, geometry: { type: "Polygon", coordinates: [[[138, -29], [153, -29], [153, -10], [138, -10], [138, -29]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Western Australia", STATE_CODE: "WA" }, geometry: { type: "Polygon", coordinates: [[[113, -35], [129, -35], [129, -14], [113, -14], [113, -35]]] } },
+      { type: "Feature", properties: { STATE_NAME: "South Australia", STATE_CODE: "SA" }, geometry: { type: "Polygon", coordinates: [[[129, -38], [141, -38], [141, -26], [129, -26], [129, -38]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Tasmania", STATE_CODE: "TAS" }, geometry: { type: "Polygon", coordinates: [[[144.5, -43.5], [148.5, -43.5], [148.5, -40.5], [144.5, -40.5], [144.5, -43.5]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Northern Territory", STATE_CODE: "NT" }, geometry: { type: "Polygon", coordinates: [[[129, -26], [138, -26], [138, -11], [129, -11], [129, -26]]] } },
+      { type: "Feature", properties: { STATE_NAME: "Australian Capital Territory", STATE_CODE: "ACT" }, geometry: { type: "Polygon", coordinates: [[[149, -35.5], [149.3, -35.5], [149.3, -35.2], [149, -35.2], [149, -35.5]]] } }
+    ]
+  };
+}
+
+// Create the choropleth map
+function createChoroplethMap() {
+  const container = d3.select('#q2-map-view .q2-chart-container');
+  container.html(''); // Clear "Coming Soon" message
+  
+  const width = 800;
+  const height = 500;
+  const margin = { top: 40, right: 20, bottom: 80, left: 20 };
+  
+  const svg = container.append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+  
+  // Store references
+  window.q2MapSvg = svg;
+  window.q2MapWidth = width;
+  window.q2MapHeight = height;
+  
+  updateChoroplethMap();
+}
+
+// Update the choropleth map based on current year
+function updateChoroplethMap() {
+  const svg = window.q2MapSvg;
+  const width = window.q2MapWidth;
+  const height = window.q2MapHeight;
+  
+  if (!svg || !australiaTopoJSON) {
+    console.log('Map not ready yet');
+    return;
+  }
+  
+  // Clear existing map
+  svg.selectAll('*').remove();
+  
+  // Get data for current year
+  const yearData = jurisdictionData.filter(d => d.year === currentMapYear);
+  
+  // Create color scale
+  const maxFines = d3.max(yearData, d => d.totalFines);
+  const colorScale = d3.scaleSequential(d3.interpolateBlues)
+    .domain([0, maxFines]);
+  
+  // Create projection for Australia
+  const projection = d3.geoMercator()
+    .center([134, -25]) // Center on Australia
+    .scale(1000)
+    .translate([width / 2, height / 2]);
+  
+  const path = d3.geoPath().projection(projection);
+  
+  // Draw states
+  const states = svg.selectAll('.australia-state')
+    .data(australiaTopoJSON.features)
+    .enter().append('path')
+    .attr('class', 'australia-state')
+    .attr('d', path)
+    .style('fill', d => {
+      const stateCode = d.properties.STATE_CODE;
+      const stateData = yearData.find(y => y.jurisdiction === stateCode);
+      return stateData ? colorScale(stateData.totalFines) : '#ccc';
+    })
+    .style('stroke', '#fff')
+    .style('stroke-width', 1)
+    .style('opacity', 0.8);
+  
+  // Add state labels
+  svg.selectAll('.state-label')
+    .data(australiaTopoJSON.features)
+    .enter().append('text')
+    .attr('class', 'state-label')
+    .attr('transform', d => {
+      const centroid = path.centroid(d);
+      return `translate(${centroid[0]},${centroid[1]})`;
+    })
+    .attr('text-anchor', 'middle')
+    .attr('dy', '.35em')
+    .style('font-size', '10px')
+    .style('font-weight', 'bold')
+    .style('fill', '#333')
+    .text(d => d.properties.STATE_CODE);
+  
+  // Add year slider for map
+  const years = [...new Set(jurisdictionData.map(d => d.year))].sort();
+  const yearSlider = svg.append('g')
+    .attr('class', 'year-slider')
+    .attr('transform', `translate(${width / 2 - 100}, ${height + 50})`);
+  
+  yearSlider.selectAll('.year-option')
+    .data(years)
+    .enter().append('rect')
+    .attr('class', 'year-option')
+    .attr('x', (d, i) => i * 25)
+    .attr('y', 0)
+    .attr('width', 20)
+    .attr('height', 15)
+    .style('fill', d => d === currentMapYear ? '#1f77b4' : '#ddd')
+    .style('cursor', 'pointer')
+    .on('click', function(event, d) {
+      currentMapYear = d;
+      updateChoroplethMap();
+    });
+  
+  yearSlider.selectAll('.year-text')
+    .data(years)
+    .enter().append('text')
+    .attr('class', 'year-text')
+    .attr('x', (d, i) => i * 25 + 10)
+    .attr('y', 30)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '9px')
+    .text(d => d);
+  
+  yearSlider.append('text')
+    .attr('class', 'slider-label')
+    .attr('x', -10)
+    .attr('y', -10)
+    .style('text-anchor', 'start')
+    .style('font-size', '12px')
+    .text('Select Year:');
+  
+  // Add legend
+  const legendWidth = 150;
+  const legend = svg.append('g')
+    .attr('class', 'legend')
+    .attr('transform', `translate(${width - legendWidth - 10}, 10)`);
+  
+  legend.append('text')
+    .attr('class', 'legend-title')
+    .attr('x', legendWidth / 2)
+    .attr('y', 0)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '12px')
+    .text('Number of Fines');
+  
+  const legendScale = d3.scaleLinear()
+    .domain([0, maxFines])
+    .range([0, legendWidth]);
+  
+  const legendAxis = d3.axisBottom(legendScale)
+    .tickFormat(d3.format(','))
+    .ticks(4);
+  
+  // Create gradient for legend
+  const defs = svg.append('defs');
+  const gradient = defs.append('linearGradient')
+    .attr('id', 'legend-gradient')
+    .attr('x1', '0%')
+    .attr('y1', '0%')
+    .attr('x2', '100%')
+    .attr('y2', '0%');
+  
+  gradient.selectAll('stop')
+    .data(d3.range(0, 1.01, 0.1))
+    .enter().append('stop')
+    .attr('offset', d => `${d * 100}%`)
+    .attr('stop-color', d => colorScale(d * maxFines));
+  
+  legend.append('rect')
+    .attr('x', 0)
+    .attr('y', 10)
+    .attr('width', legendWidth)
+    .attr('height', 15)
+    .style('fill', 'url(#legend-gradient)');
+  
+  legend.append('g')
+    .attr('transform', `translate(0, 25)`)
+    .call(legendAxis);
+  
+  // Tooltip for map
+  const tooltip = d3.select('body').select('.q2-tooltip');
+  if (tooltip.empty()) {
+    d3.select('body').append('div')
+      .attr('class', 'q2-tooltip')
+      .style('opacity', 0);
+  }
+  
+  states.on('mouseover', function(event, d) {
+    const stateCode = d.properties.STATE_CODE;
+    const stateData = yearData.find(y => y.jurisdiction === stateCode);
+    if (stateData) {
+      d3.select('.q2-tooltip')
+        .transition().duration(200).style('opacity', .9)
+        .html(`
+          <strong>${jurisdictionNames[stateCode]}</strong><br/>
+          Year: ${currentMapYear}<br/>
+          Total Fines: ${d3.format(',')(stateData.totalFines)}
+        `)
+        .style('left', (event.pageX + 10) + 'px')
+        .style('top', (event.pageY - 28) + 'px');
+    }
+  })
+  .on('mouseout', function() {
+    d3.select('.q2-tooltip').transition().duration(500).style('opacity', 0);
   });
 }
 
