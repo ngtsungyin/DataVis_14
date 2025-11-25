@@ -856,4 +856,158 @@ p{
   }
 }
 
+/* ---------- visualisation3 / controls & note (append to styles.css) ---------- */
+
+/* View toggle / top controls (based on q2 styles) */
+.q3-view-toggle-container {
+  text-align: center;
+  margin: 20px 0 12px 0;
+}
+
+.q3-view-buttons {
+  display: inline-flex;
+  background: #f8f9fa;
+  padding: 8px;
+  border-radius: 12px;
+  gap: 8px;
+  border: 2px solid #eaeaea;
+}
+
+.q3-view-btn {
+  padding: 10px 18px;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  color: #666;
+  transition: all 0.2s ease;
+  box-shadow: none;
+}
+
+.q3-view-btn.active {
+  background: white;
+  color: #5e6b4b; /* green accent */
+  box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+.q3-view-btn:hover:not(.active) {
+  background: rgba(94, 107, 75, 0.06);
+  color: #5e6b4b;
+}
+
+/* Controls card similar to vis2 */
+.q3-controls {
+  background: #f8f9fa;
+  padding: 14px 18px;
+  border-radius: 12px;
+  margin: 12px 0 18px 0;
+  border: 1px solid #eaeaea;
+  display: flex;
+  gap: 22px;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+/* filter pills */
+.q3-filter-buttons {
+  display:flex;
+  gap:10px;
+  align-items:center;
+  flex-wrap:wrap;
+}
+.q3-pill {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:white;
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid #e7e7e7;
+  cursor:pointer;
+  font-weight:600;
+  color:#333;
+}
+.q3-pill input { transform: translateY(1px); }
+
+/* chart container already uses .q2-chart-container styling (white box, shadow) */
+
+/* vertical guideline */
+.q3-vline {
+  pointer-events: none;
+}
+
+/* notes (green theme A) */
+.q3-notes {
+  background: #eef6e8;
+  border-left: 4px solid #5e6b4b;
+  padding: 16px 20px;
+  margin: 28px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+.q3-notes p { margin: 0; color: #3a5930; }
+
+/* small responsive tweaks */
+@media (max-width:900px) {
+  .q3-controls { flex-direction: column; align-items: flex-start; }
+  .q3-view-buttons { margin-bottom: 6px; }
+}
+
+/* visualisation4 notes: purple variant (keeps same spacing / layout as q2/q3 notes) */
+.q4-notes {
+  background: #f6f0fb;          /* very light purple background */
+  border-left: 4px solid #9b7fd8; /* purple accent on left */
+  padding: 16px 20px;
+  margin: 28px 0;
+  border-radius: 0 8px 8px 0;
+  font-size: 14px;
+}
+.q4-notes p {
+  margin: 0;
+  color: #5a3e8a; /* darker purple text to match left border */
+}
+
+/* Q4 — Make bar chart wider and pie chart smaller when both shown */
+#q4-charts {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+}
+
+/* Default sizes */
+#barChart {
+  flex: 1 1 60%;
+  min-width: 600px;   /* ← bigger default */
+}
+
+/* Fix for Pie Chart Legend cutting off text */
+#pieChart svg {
+  overflow: visible;
+}
+
+#pieChart {
+  flex: 1 1 35%;
+  min-width: 360px;
+  width: 650px;          /* ← 給更寬的空間 */
+  margin: 0 auto;
+}
+
+/* When pie-only mode, center it */
+#q4-charts.pie-only #pieChart {
+  flex: 0 1 600px;
+  margin: 0 auto;
+}
+
+/* When bar-only mode, give bar full width */
+#q4-charts.bar-only #barChart {
+  flex: 0 1 100%;
+  min-width: 900px;
+}
+
+
+
 
