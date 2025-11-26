@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Interactive Speeding Enforcement Dashboard — Q3</title>
-  <!-- adjust path if your CSS is at a different location -->
   <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -15,33 +14,40 @@
   Click a topic below to open its interactive visualisation.
 </p>
 
-<div class="vis-menu">
-  <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
-  <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
-  <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
-  <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
-  <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
-  <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
-</div>
+    <!-- Top controls (view + filters) -->
+    <div class="q3-top-controls" style="margin-top:22px;">
+      <div class="q3-view-toggle-container">
+        <div class="q3-view-buttons">
+          <button id="btn-line" class="q3-view-btn active" data-view="line">Line Chart</button>
+          <button id="btn-stacked" class="q3-view-btn" data-view="stacked">Stacked Area</button>
+        </div>
+      </div>
 
-    <h2 style="text-align:left;margin-top:28px;font-family:'Playfair Display',serif;font-size: 40px;">
-      Q3 — How did the national camera vs police issued mix change from 2008–2024?
-    </h2>
-    <p style="text-align:left">
-      Shows how camera-issued and police-issued fines evolved nationally.
-      Toggle between a stacked area chart (cumulative) and multi-line view (absolute). Use the "% mode" checkbox to show proportions per year.
-    </p>
+      <div class="q3-controls">
+        <div class="q3-filter-buttons">
+          <label style="font-weight:600; margin-right: 12px;">Detection method:</label>
+          <label class="q3-pill"><input type="checkbox" id="filter-camera" checked> Camera</label>
+          <label class="q3-pill"><input type="checkbox" id="filter-police" checked> Police</label>
+        </div>
 
-    <div style="margin:22px 0; display:flex; align-items:center; gap:12px;">
-      <button id="btn-stacked" class="btn" style="padding:8px 14px;font-size:14px">Stacked area</button>
-      <button id="btn-line" class="btn" style="padding:8px 14px;font-size:14px">Multi-line</button>
-      <label style="margin-left:8px; color:var(--muted); font-weight:600;">
-        <input id="percentMode" type="checkbox" style="margin-right:8px; vertical-align:middle"> % mode
-      </label>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <label style="font-weight:600">Options:</label>
+          <label style="font-weight:600;">
+            <input id="percentMode" type="checkbox" style="margin-right:8px;"> % mode
+          </label>
+        </div>
+      </div>
     </div>
 
-    <!-- chart container (visualisation3.js will draw into #chart) -->
-    <div id="chart" style="margin-top:18px;"></div>
+    <!-- Chart area -->
+    <div id="q3-chart-wrap" class="q2-chart-container" style="margin-top:18px;">
+      <div id="q3-chart" style="width:100%;"></div>
+    </div>
+
+    <!-- Note -->
+    <div class="q3-notes">
+      <p><strong>Note:</strong> Use the view buttons to switch between a multi-line view (absolute counts) and stacked area (cumulative). Toggle "% mode" to show proportions per year (camera vs police). The detection-method checkboxes allow hiding one of the series.</p>
+    </div>
 
   </main>
 
@@ -50,7 +56,6 @@
     <div>by Cherylynn, Ng Tsung Yin, Elisa</div>
   </footer>
 
-  <!-- D3 and chart script. Adjust path to visualisation3.js if it's in a different folder -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/visualisation3.js"></script>
   <script src="js/header-sidebar.js"></script>
