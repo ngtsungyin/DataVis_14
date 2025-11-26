@@ -4,6 +4,13 @@ function loadSidebar() {
     .then(response => response.text())
     .then(data => {
       document.body.insertAdjacentHTML('afterbegin', data);
+      
+      // Check saved state and apply it
+      const isSidebarClosed = localStorage.getItem('sidebarClosed') === 'true';
+      if (isSidebarClosed) {
+        document.body.classList.add('sidebar-closed');
+      }
+      
       highlightCurrentPage();
       setupSidebarToggle();
     })
@@ -24,34 +31,16 @@ function highlightCurrentPage() {
 
 // Setup sidebar toggle functionality
 function setupSidebarToggle() {
-  const sidebar = document.querySelector('.sidebar');
   const sidebarClose = document.getElementById('sidebar-close');
-  const mobileToggle = document.getElementById('mobile-menu-toggle');
-  const mainContent = document.querySelector('.main-content');
   
-  // Close sidebar (desktop)
+  // Close sidebar with persistence
   if (sidebarClose) {
     sidebarClose.addEventListener('click', function() {
-      document.body.classList.toggle('sidebar-closed');
+      const isNowClosed = document.body.classList.toggle('sidebar-closed');
+      // Save state to localStorage
+      localStorage.setItem('sidebarClosed', isNowClosed);
     });
   }
-  
-  // Mobile toggle
-  if (mobileToggle) {
-    mobileToggle.addEventListener('click', function() {
-      sidebar.classList.toggle('mobile-open');
-    });
-  }
-  
-  // Close sidebar when clicking on a link (mobile)
-  const navLinks = document.querySelectorAll('.nav-link');
-  navLinks.forEach(link => {
-    link.addEventListener('click', function() {
-      if (window.innerWidth <= 768) {
-        sidebar.classList.remove('mobile-open');
-      }
-    });
-  });
 }
 
 // Load sidebar when page loads

@@ -1,11 +1,29 @@
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <h3>Speeding Analysis</h3>
-    <button class="sidebar-toggle" id="sidebar-close">
+<header class="site-header">
+  <div class="header-content container">
+    <!-- Hamburger menu button -->
+    <button class="sidebar-toggle" id="sidebar-toggle">
       <span></span>
       <span></span>
       <span></span>
     </button>
+    
+    <!-- Your existing nav -->
+    <nav class="navbar">
+      <div class="nav">
+        <a href="index.html">Home</a>
+        <a href="background.html">Background</a>
+        <a href="visualisation-section.html">Dashboard</a>
+        <a href="team.html">Team</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<!-- Sidebar that slides in from left -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-header">
+    <h3>Speeding Analysis</h3>
+    <button class="sidebar-close" id="sidebar-close">×</button>
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">
@@ -28,3 +46,5 @@
   </nav>
 </aside>
 
+<!-- Overlay for when sidebar is open -->
+<div class="sidebar-overlay" id="sidebar-overlay"></div>
