@@ -8,21 +8,28 @@
 </head>
 
 <body>
-  <header class="site-header">
-    <nav class="navbar container">
-      <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="background.html">Background</a>
-        <a href="visualisation-section.html">Dashboard</a>
-        <a href="team.html">Team</a>
-      </div>
-    </nav>
-  </header>
 
-  <main class="dashboard container">
-    <h1>What are the age-group patterns of speeding fines?</h1>
-    <p style="max-width:900px;margin:0 auto;color:var(--muted)">
-      Explore age-group patterns of speeding fines. Use the controls to pick the year and filter age groups (bar chart). The pie chart always shows the full-year distribution and does not apply age-group filters.
+  <main class="dashboard container-inner">
+<p style="max-width:900px;margin:0 auto;color:var(--muted);margin-top:100px">
+  Explore national and jurisdiction-level patterns in speeding fines through focused visual analyses. 
+  Click a topic below to open its interactive visualisation.
+</p>
+
+<div class="vis-menu">
+  <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
+  <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
+  <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
+  <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
+  <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
+  <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
+</div>
+
+    <h2 style="text-align:left;margin-top:28px;font-family:'Playfair Display',serif;font-size: 40px;">
+      Q4 — What are the age-group patterns of speeding fines in 2023 and 2024?
+    </h2>
+    <p style="text-align:left;color:var(--muted)">
+      The visualisation shows two complementary views: a bar chart comparing total fines across age groups,
+      and a heatmap highlighting relative severity among groups.
     </p>
 
     <!-- Top controls -->
@@ -66,6 +73,6 @@
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/visualisation4.js"></script>
-
+  <script src="js/header-sidebar.js"></script>
 </body>
 </html>

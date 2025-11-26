@@ -488,9 +488,9 @@ function createChoroplethMap() {
   const container = d3.select('#q2-map');
   container.html(''); // Clear loading message
   
-  const width = Math.min(900, window.innerWidth - 100);
-  const height = 450;
-  const margin = { top: 80, right: 100, bottom: 100, left: 100 };
+  const width = Math.min(1100, window.innerWidth - 100);
+  const height = 550;
+  const margin = { top: 80, right: 120, bottom: 100, left: 120 };
   
   const svg = container.append('svg')
     .attr('width', width + margin.left + margin.right)
@@ -547,7 +547,7 @@ function updateChoroplethMap() {
   // Create projection for Australia
   const projection = d3.geoMercator()
     .center([136, -28])
-    .scale(900)
+    .scale(1100)
     .translate([width / 2, height / 2]);
   
   const path = d3.geoPath().projection(projection);
@@ -783,7 +783,7 @@ function createJurisdictionTable(yearData) {
   // Add fines count cells
   rows.append('td')
     .text(d => d3.format(',')(d.totalFines))
-    .style('text-align', 'right');
+    .style('text-align', 'center');
 }
 
 // Initialize when page loads
