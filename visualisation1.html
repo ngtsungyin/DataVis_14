@@ -8,18 +8,24 @@
 
 </head>
 <body>
-  <header class="site-header">
-    <nav class="navbar container">
-      <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="background.html">Background</a>
-        <a href="visualisation-section.html">Dashboard</a>
-        <a href="team.html">Team</a>
-      </div>
-    </nav>
-  </header>
 
   <main class="dashboard container">
+    <div class="dashboard container-inner">
+        <p style="max-width:900px;margin-top:0 auto;color:var(--muted);margin-top:22px">
+          Explore national and jurisdiction-level patterns in speeding fines through focused visual analyses. 
+          Click a topic below to open its interactive visualisation.
+        </p>
+
+        <div class="vis-menu">
+          <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
+          <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
+          <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
+          <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
+          <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
+          <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
+        </div>
+</div>
+
     <h1>National Trends in Speeding Fines (2008–2024)</h1>
     <p style="max-width:900px;margin:0 auto;color:var(--muted)">
       Explore how speeding fines have changed nationally and compare detection methods over time in Australia.
@@ -52,5 +58,6 @@
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="js/visualisation1.js"></script>
+  <script src="js/header-sidebar.js"></script>
 </body>
 </html>

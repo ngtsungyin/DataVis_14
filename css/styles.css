@@ -24,7 +24,7 @@ body {
 }
 
 main {
-  flex: 1 1 auto;
+  flex: 1 0 auto;
 }
 
 a{color:inherit;text-decoration:none}
@@ -86,6 +86,7 @@ a{color:inherit;text-decoration:none}
 
 /* Footer attribution strip (保持你的原大小) */
 .footer-strip{
+  flex-shrink: 0;
   display:flex;justify-content:space-between;align-items:center;
   padding:26px 32px;
   color:var(--muted);
@@ -284,6 +285,20 @@ p{
   padding: 0 32px;
 }
 
+.dashboard.container-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.dashboard.container-inner p {
+  max-width: 900px;
+  margin: 0 auto 20px auto;
+  text-align: center;
+  color: var(--muted);
+}
+
 /* responsive */
 @media (max-width:1000px){
   .hero .title{font-size:80px}
@@ -371,7 +386,8 @@ p{
   flex-direction: column;
   gap: 4px;
   position: absolute;
-  left: 32px; /* Match container padding */
+  left: 0; /* Match container padding */
+  margin-left: 32px;
   z-index: 1003;
 }
 
@@ -449,7 +465,7 @@ p{
   border-bottom: 1px solid #eaeaea;
   margin-bottom: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
   align-items: center;
 }
 
@@ -458,24 +474,55 @@ p{
   color: #5e6b4b;
   font-size: 18px;
   font-family: 'Playfair Display', serif;
+
+}
+
+/*Add animation to hamburger when sidebar is open */
+.sidebar.open ~ .site-header .sidebar-toggle span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.sidebar.open ~ .site-header .sidebar-toggle span:nth-child(2) {
+  opacity: 0;
+}
+
+.sidebar.open ~ .site-header .sidebar-toggle span:nth-child(3) {
+  transform: rotate(-45deg) translate(7px, -6px);
 }
 
 .sidebar-close {
   background: none;
   border: none;
-  font-size: 24px;
   cursor: pointer;
-  color: #333;
-  padding: 0;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
   width: 30px;
   height: 30px;
-  display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.sidebar-close:hover {
-  color: #5e6b4b;
+.sidebar-close span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: #333;
+  transition: all 0.3s ease;
+  position: absolute;
+}
+
+.sidebar-close span:nth-child(1) {
+  transform: rotate(45deg);
+}
+
+.sidebar-close span:nth-child(2) {
+  transform: rotate(-45deg);
+}
+
+.sidebar-close:hover span {
+  background: #5e6b4b;
 }
 
 .sidebar-nav {
@@ -796,12 +843,10 @@ p{
   border: 2px solid #5e6b4b;
   background: white;
   color: #5e6b4b;
-  border-radius: 20px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  min-width: 60px;
+  transition: all 0.2s ease;
 }
 
 .year-btn:hover {
@@ -839,48 +884,50 @@ p{
   color: #666;
 }
 
-
-.q2-view-toggle-container {
-  text-align: center;
-  margin: 30px 0 20px 0;
-}
+/*Toggle between line chart or map's container*/
 
 .q2-view-buttons {
   display: inline-flex;
-  background: #f8f9fa;
-  padding: 8px;
-  border-radius: 12px;
-  gap: 8px;
-  border: 2px solid #eaeaea;
+  background: white;
+  padding: 12px;
+  border-radius: 16px;
+  gap: 12px;
+  border: 2px solid #dee2e6;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+  margin-top: 10px;
 }
 
 .q2-view-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 20px;
+  gap: 12px;
+  padding: 18px 28px;
   border: none;
   background: transparent;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 700;
+  font-size: 18px;
   color: #666;
   transition: all 0.3s ease;
+  min-width: 180px;
 }
 
 .q2-view-btn.active {
   background: white;
   color: #5e6b4b;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 15px rgba(94, 107, 75, 0.3);
+  transform: translateY(-2px);
 }
 
 .q2-view-btn:hover:not(.active) {
   background: rgba(94, 107, 75, 0.1);
   color: #5e6b4b;
+  transform: translateY(-1px);
 }
 
 .q2-view-icon {
-  font-size: 16px;
+  font-size: 24px;
 }
 
 .q2-view-content {
@@ -899,23 +946,33 @@ p{
 
 .q2-chart-container {
   background: white;
-  border-radius: 12px;
-  padding: 25px;
-  margin: 20px 0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 35px;
+  margin: 25px 0;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
   border: 1px solid #eaeaea;
+  min-height: 500px;
+}
+
+.q2-chart-container h3 {
+  font-family: 'Playfair Display', serif;
+  margin-bottom: 25px;
+  text-align: center;
+  font-size: 28px;
+  color: #333;
 }
 
 .q2-controls {
   background: #f8f9fa;
-  padding: 20px;
-  border-radius: 12px;
-  margin: 20px 0;
-  border: 1px solid #eaeaea;
+  padding: 25px;
+  border-radius: 16px;
+  margin: 25px 0;
+  border: 2px solid #eaeaea;
   display: flex;
   gap: 40px;
   align-items: flex-start;
   flex-wrap: wrap;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.08);
 }
 
 .q2-filter-btn {
@@ -923,12 +980,10 @@ p{
   border: 2px solid #5e6b4b;
   background: white;
   color: #5e6b4b;
-  border-radius: 20px;
+  border-radius: 6px;
   cursor: pointer;
   font-size: 14px;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  min-width: 60px;
+  transition: all 0.2s ease;
 }
 
 .q2-filter-btn:hover {
