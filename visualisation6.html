@@ -10,19 +10,25 @@
 </head>
 <body>
 
-  <header class="site-header">
-    <nav class="navbar container">
-      <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="background.html">Background</a>
-        <a href="visualisation-section.html">Dashboard</a>
-        <a href="team.html">Team</a>
-      </div>
-    </nav>
-  </header>
-
   <main class="dashboard container centered-page">
-    <h1 style="margin-bottom:8px;font-size:2rem;font-weight:700;text-align:center;">Where are fines concentrated by location type, and how has this changed from 2008 to 2024?</h1>
+
+        <div class="dashboard container-inner">
+        <p style="max-width:900px;margin-top:0 auto;color:var(--muted);margin-top:22px">
+          Explore national and jurisdiction-level patterns in speeding fines through focused visual analyses. 
+          Click a topic below to open its interactive visualisation.
+        </p>
+
+        <div class="vis-menu">
+          <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
+          <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
+          <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
+          <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
+          <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
+          <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
+        </div>
+    </div>
+    
+    <h1 style="margin-bottom:8px;font-size:2rem;font-weight:700;text-align:center;">Fines concentrated by location type from 2008 to 2024</h1>
     <p style="max-width:900px;margin:0 0 24px 0;color:var(--muted);text-align:center;">Heatmap of fines by location type and year</p>
     <div id="heatmap-chart" class="chart-container" style="max-width:1300px;margin:0 auto 32px auto;"></div>
     <div class="chart-note" style="max-width:900px;margin:0 auto 48px auto;padding:18px 24px;background:#f4faff;border-left:4px solid #e53e3e;color:#222;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
@@ -36,5 +42,6 @@
   </footer>
 
   <script src="js/visualisation6.js"></script>
+  <script src="js/header-sidebar.js"></script>
 </body>
 </html>

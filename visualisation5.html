@@ -9,19 +9,25 @@
   <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-  <header class="site-header">
-    <nav class="navbar container">
-      <div class="nav">
-        <a href="index.html">Home</a>
-        <a href="background.html">Background</a>
-        <a href="visualisation-section.html">Dashboard</a>
-        <a href="team.html">Team</a>
-      </div>
-    </nav>
-  </header>
 
   <main class="dashboard container">
-    <h1>What is the monthly seasonality in 2024, and how does it differ by detection method?</h1>
+        <div class="dashboard container-inner">
+        <p style="max-width:900px;margin-top:0 auto;color:var(--muted);margin-top:22px">
+          Explore national and jurisdiction-level patterns in speeding fines through focused visual analyses. 
+          Click a topic below to open its interactive visualisation.
+        </p>
+
+        <div class="vis-menu">
+          <a class="vis-btn" href="visualisation1.html">Visualisation 1<br><span>National trends over time</span></a>
+          <a class="vis-btn" href="visualisation2.html">Visualisation 2<br><span>Jurisdiction comparison</span></a>
+          <a class="vis-btn" href="visualisation3.html">Visualisation 3<br><span>Camera vs Police issued mix</span></a>
+          <a class="vis-btn" href="visualisation4.html">Visualisation 4<br><span>Age–group patterns</span></a>
+          <a class="vis-btn" href="visualisation5.html">Visualisation 5<br><span>Monthly seasonality</span></a>
+          <a class="vis-btn" href="visualisation6.html">Visualisation 6<br><span>Location-based patterns</span></a>
+        </div>
+    </div>
+
+    <h1>Monthly seasonality fines in 2024 by detection method</h1>
     <p style="max-width:900px;margin:0 auto;color:var(--muted)">Monthly Fines by Detection Method (2024)</p>
     <div class="chart-controls" style="max-width:900px;margin:0 auto 24px auto;">
       <div class="control-group" style="display:flex;align-items:center;gap:18px;">
@@ -48,5 +54,6 @@
   </footer>
 
   <script src="js/visualisation5.js"></script>
+  <script src="js/header-sidebar.js"></script>
 </body>
 </html>
