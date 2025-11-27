@@ -75,8 +75,9 @@ d3.csv("data/visualisation6.csv").then(function(data) {
     .selectAll("text")
     .attr("font-size", Math.max(10, Math.min(14, Math.floor(cellWidth * 0.35)) ) + "px")
     .attr("transform", "rotate(-45)")
-    .attr("text-anchor", "end")
-    .attr("dy", "-0.3em");
+    .attr("text-anchor", "start")
+    .attr("dx", "0.2em")
+    .attr("dy", "-0.5em");
 
   // Y axis (locations)
   const y = d3.scaleBand()
