@@ -302,7 +302,7 @@ d3.csv("data/visualisation4.csv").then(raw => {
       const g = legend.append("g").attr("transform",`translate(0,${i*26})`);
       g.append("rect").attr("width",14).attr("height",14).attr("fill",colorMap[d.AGE_GROUP]||defaultColor).attr("rx",2);
       g.append("text").attr("x",18).attr("y",12)
-        .text(`${d.AGE_GROUP} · ${d3.format(",")(d.value)} (${pct})`)
+        .text(`${d.AGE_GROUP}`)
         .style("font-size","13px");
     });
   }

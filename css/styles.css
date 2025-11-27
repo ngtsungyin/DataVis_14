@@ -1213,10 +1213,11 @@ p{
   background: #eef6e8;
   border-left: 4px solid #5e6b4b;
   padding: 16px 20px;
-  margin: 28px 0;
+  margin: 30px 0;
   border-radius: 0 8px 8px 0;
   font-size: 14px;
 }
+
 .q3-notes p { margin: 0; color: #3a5930; }
 
 /* small responsive tweaks */
@@ -1230,7 +1231,7 @@ p{
   background: #f6f0fb;          /* very light purple background */
   border-left: 4px solid #9b7fd8; /* purple accent on left */
   padding: 16px 20px;
-  margin: 28px 0;
+  margin: 30px 0;
   border-radius: 0 8px 8px 0;
   font-size: 14px;
 }
