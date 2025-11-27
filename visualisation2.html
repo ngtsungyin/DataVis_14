@@ -115,7 +115,7 @@
     }
   </style>
 </head>
-<body class="line-view-active">
+<body class="map-view-active">
 
   <main class="dashboard container">
     <div class="dashboard container-inner">
@@ -142,11 +142,11 @@
     <!-- View Toggle Buttons -->
     <div class="q2-view-toggle-container">
       <div class="q2-view-buttons">
-        <button class="q2-view-btn active" data-view="linechart">
+        <button class="q2-view-btn" data-view="linechart">
           <span class="q2-view-icon">📈</span>
           Line Chart View
         </button>
-        <button class="q2-view-btn" data-view="map">
+        <button class="q2-view-btn active" data-view="map">
           <span class="q2-view-icon">🗺️</span>
           Choropleth Map View
         </button>
@@ -154,6 +154,16 @@
     </div>
 
 <div class="q2-controls">
+  <!-- Map Controls (shown only in map view) -->
+  <div class="q2-map-controls">
+    <div class="year-selection-container">
+      <label style="font-weight:600; margin-right: 15px;">Select Year:</label>
+      <div class="year-buttons" id="year-buttons">
+        <!-- Year buttons will be generated here -->
+      </div>
+    </div>
+  </div>
+
   <!-- Line Chart Controls (shown only in line chart view) -->
   <div class="q2-line-controls">
     <div class="q2-filter-buttons">
@@ -177,32 +187,10 @@
       </div>
     </div>
   </div>
-
-  <!-- Map Controls (shown only in map view) -->
-  <div class="q2-map-controls">
-    <div class="year-selection-container">
-      <label style="font-weight:600; margin-right: 15px;">Select Year:</label>
-      <div class="year-buttons" id="year-buttons">
-        <!-- Year buttons will be generated here -->
-      </div>
-    </div>
-  </div>
 </div>
 
-    <!-- Line Chart View (Default) -->
-    <div id="q2-linechart-view" class="q2-view-content active">
-      <div class="q2-chart-container">
-        <h3 style="font-family:'Playfair Display',serif; margin-bottom: 15px; text-align: center;">
-          Speeding Fines Trends by Jurisdiction (2008-2024)
-        </h3>
-        <div id="q2-linechart">
-          <div class="chart-loading">Loading line chart...</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Map View (Hidden by default) -->
-    <div id="q2-map-view" class="q2-view-content">
+    <!-- Map View (Now Default) -->
+    <div id="q2-map-view" class="q2-view-content active">
       <div class="q2-chart-container">
         <h3 style="font-family:'Playfair Display',serif; margin-bottom: 15px; text-align: center;">
           Speeding Fines Distribution Across Australia
@@ -211,6 +199,18 @@
           <div id="q2-map">
             <div class="chart-loading">Loading map...</div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Line Chart View (Hidden by default) -->
+    <div id="q2-linechart-view" class="q2-view-content">
+      <div class="q2-chart-container">
+        <h3 style="font-family:'Playfair Display',serif; margin-bottom: 15px; text-align: center;">
+          Speeding Fines Trends by Jurisdiction (2008-2024)
+        </h3>
+        <div id="q2-linechart">
+          <div class="chart-loading">Loading line chart...</div>
         </div>
       </div>
     </div>

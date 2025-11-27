@@ -27,6 +27,8 @@ async function initQ2() {
   console.log('Jurisdiction data loaded:', jurisdictionData.length, 'records');
   await loadMapData();
   console.log('Map data loaded:', australiaTopoJSON ? 'Yes' : 'No');
+  createYearButtons();
+  createChoroplethMap();
   createLineChart();
   setupInteractions();
   console.log('Q2 initialization complete');
@@ -297,14 +299,11 @@ d3.selectAll('.q2-view-btn').on('click', function() {
   d3.select('body').classed('line-view-active', view === 'linechart');
   d3.select('body').classed('map-view-active', view === 'map');
   
-  if (view === 'map') {
-    createYearButtons();
-    createChoroplethMap();
-  } else {
+  if (view === 'linechart') {
     updateLineChart();
   }
 });
-  
+
   // Quick filter buttons (line chart only)
   d3.select('#q2-top3-btn').on('click', function() {
     // Find top 3 jurisdictions by latest year (2024)
@@ -585,104 +584,129 @@ function updateChoroplethMap() {
     .text(d => d.properties.STATE_CODE);
 
   // Add vertical color legend
-  const colorLegend = svg.append('g')
-    .attr('class', 'color-legend')
-    .attr('transform', `translate(${width - 20}, 50)`); // Move to right side
+const colorLegend = svg.append('g')
+  .attr('class', 'color-legend')
+  .attr('transform', `translate(${width - 40}, 50)`); // Move further right to accommodate larger legend
 
-  colorLegend.append('text')
-    .attr('class', 'color-legend-title')
-    .attr('x', 10)
-    .attr('y', -20)
-    .attr('text-anchor', 'start')
-    .style('font-size', '12px')
-    .style('font-weight', 'bold')
-    .text('Number of Fines');
+// Make legend title bigger
+colorLegend.append('text')
+  .attr('class', 'color-legend-title')
+  .attr('x', 15) // Adjusted for larger legend
+  .attr('y', -25) // Move title up
+  .attr('text-anchor', 'start')
+  .style('font-size', '14px') // Increased from 12px
+  .style('font-weight', 'bold')
+  .text('Number of Fines');
 
-  // Create vertical gradient
-  const defs = svg.append('defs');
-  const gradient = defs.append('linearGradient')
-    .attr('id', 'vertical-gradient')
-    .attr('x1', '0%')
-    .attr('y1', '100%')  // Bottom
-    .attr('x2', '0%')
-    .attr('y2', '0%');   // Top
+// Create vertical gradient
+const defs = svg.append('defs');
+const gradient = defs.append('linearGradient')
+  .attr('id', 'vertical-gradient')
+  .attr('x1', '0%')
+  .attr('y1', '100%')  // Bottom
+  .attr('x2', '0%')
+  .attr('y2', '0%');   // Top
 
-  // Add gradient stops
-  const stops = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
-  gradient.selectAll('stop')
-    .data(stops)
-    .enter().append('stop')
-    .attr('offset', d => `${d * 100}%`)
-    .attr('stop-color', d => colorScale(d * maxFines));
+// Add gradient stops
+const stops = [0, 0.2, 0.4, 0.6, 0.8, 1.0];
+gradient.selectAll('stop')
+  .data(stops)
+  .enter().append('stop')
+  .attr('offset', d => `${d * 100}%`)
+  .attr('stop-color', d => colorScale(d * maxFines));
 
-  // Add vertical rectangle
-  colorLegend.append('rect')
-    .attr('x', 0)
-    .attr('y', 0)
-    .attr('width', 20)
-    .attr('height', 150)
-    .style('fill', 'url(#vertical-gradient)')
-    .style('rx', 3);
+// Make the legend rectangle larger
+colorLegend.append('rect')
+  .attr('x', 0)
+  .attr('y', 0)
+  .attr('width', 30) // Increased from 20
+  .attr('height', 200) // Increased from 150
+  .style('fill', 'url(#vertical-gradient)')
+  .style('rx', 5); // Slightly larger border radius
 
-  // Add legend axis (vertical)
-  const legendScale = d3.scaleLinear()
-    .domain([maxFines, 0])  // Reverse for vertical
-    .range([0, 150]);
+// Update legend scale for larger size
+const legendScale = d3.scaleLinear()
+  .domain([maxFines, 0])  // Reverse for vertical
+  .range([0, 200]); // Increased from 150
 
-  const legendAxis = d3.axisRight(legendScale)
-    .tickFormat(d => {
-      if (maxFines > 1000000) return d3.format('.1s')(d);
-      return d3.format(',')(d);
-    })
-    .ticks(5);
+// Make axis text larger
+const legendAxis = d3.axisRight(legendScale)
+  .tickFormat(d => {
+    if (maxFines > 1000000) return d3.format('.1s')(d);
+    return d3.format(',')(d);
+  })
+  .ticks(6); // Increased from 5
 
-  colorLegend.append('g')
-    .attr('transform', `translate(20, 0)`)
-    .call(legendAxis)
-    .selectAll('text')
-    .style('font-size', '10px');
+colorLegend.append('g')
+  .attr('transform', `translate(30, 0)`) // Adjusted for wider rectangle
+  .call(legendAxis)
+  .selectAll('text')
+  .style('font-size', '12px'); // Increased from 10px
     
   // Create jurisdiction data table (HTML, not SVG)
   createJurisdictionTable(yearData);
   
-  // Add tooltip
-  const tooltip = d3.select('.q2-tooltip');
+  // Add choropleth map tooltip
+// Remove any existing tooltip first
+d3.select('.q2-tooltip').remove();
+
+// Create tooltip
+const tooltip = d3.select('body').append('div')
+  .attr('class', 'q2-tooltip')
+  .style('opacity', 0)
+  .style('position', 'absolute')
+  .style('background', 'rgba(0, 0, 0, 0.85)')
+  .style('color', 'white')
+  .style('padding', '12px')
+  .style('border-radius', '6px')
+  .style('pointer-events', 'none')
+  .style('font-size', '13px')
+  .style('line-height', '1.4')
+  .style('z-index', '1000')
+  .style('backdrop-filter', 'blur(4px)')
+  .style('border', '1px solid rgba(255,255,255,0.1)');
   
-  // Enhanced hover effects for map states only
-  states.on('mouseover', function(event, d) {
-    const stateCode = d.properties.STATE_CODE;
-    const stateData = yearData.find(y => y.jurisdiction === stateCode);
-    
-    // Highlight the state only (not the table)
-    d3.select(this)
-      .style('stroke-width', '3px')
-      .style('stroke', '#333')
-      .style('filter', 'brightness(1.1)');
-    
-    if (stateData) {
-      tooltip.transition().duration(200).style('opacity', 0.9);
-      tooltip.html(`
-        <strong>${jurisdictionNames[stateCode]}</strong><br/>
-        Year: ${currentMapYear}<br/>
-        Total Fines: ${d3.format(',')(stateData.totalFines)}
+ // Enhanced hover effects for map states only
+states.on('mouseover', function(event, d) {
+  const stateCode = d.properties.STATE_CODE;
+  const stateData = yearData.find(y => y.jurisdiction === stateCode);
+  
+  // Highlight the state only (not the table)
+  d3.select(this)
+    .style('stroke-width', '3px')
+    .style('stroke', '#333')
+    .style('filter', 'brightness(1.1)');
+  
+  if (stateData) {
+    tooltip
+      .style('opacity', 1)
+      .html(`
+        <div style="font-weight: bold; margin-bottom: 5px;">${jurisdictionNames[stateCode]}</div>
+        <div>Year: ${currentMapYear}</div>
+        <div>Total Fines: ${d3.format(',')(stateData.totalFines)}</div>
       `)
       .style('left', (event.pageX + 15) + 'px')
       .style('top', (event.pageY - 35) + 'px');
-    }
-  })
-  .on('mouseout', function(event, d) {
-    const stateCode = d.properties.STATE_CODE;
-    
-    // Remove highlight unless this is the clicked jurisdiction
-    if (stateCode !== highlightedJurisdiction) {
-      d3.select(this)
-        .style('stroke-width', '1.5px')
-        .style('stroke', '#fff')
-        .style('filter', 'brightness(1)');
-    }
-    
-    tooltip.transition().duration(500).style('opacity', 0);
-  });
+  }
+})
+.on('mousemove', function(event) {
+  tooltip
+    .style('left', (event.pageX + 15) + 'px')
+    .style('top', (event.pageY - 35) + 'px');
+})
+.on('mouseout', function(event, d) {
+  const stateCode = d.properties.STATE_CODE;
+  
+  // Remove highlight unless this is the clicked jurisdiction
+  if (stateCode !== highlightedJurisdiction) {
+    d3.select(this)
+      .style('stroke-width', '1.5px')
+      .style('stroke', '#fff')
+      .style('filter', 'brightness(1)');
+  }
+  
+  tooltip.style('opacity', 0);
+});
   
   console.log('Choropleth map updated successfully');
 }
