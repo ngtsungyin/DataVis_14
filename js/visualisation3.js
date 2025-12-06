@@ -19,6 +19,33 @@ const svg = container
 
 const g = svg.append("g").attr("transform", `translate(${margin.left},${margin.top})`);
 
+// --- Chart Title ---
+svg.append("text")
+  .attr("class", "q3-title")
+  .attr("x", WIDTH / 2)
+  .attr("y", 22)
+  .attr("text-anchor", "middle")
+  .style("font-size", "20px")
+  .style("font-weight", "600")
+  .text("National Camera vs Police Issued Fines (2008–2024)");
+
+// --- X-axis Label ---
+svg.append("text")
+  .attr("class", "q3-x-label")
+  .attr("x", margin.left + width / 2)
+  .attr("y", HEIGHT - 5)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Year");
+
+// --- Y-axis Label ---
+svg.append("text")
+  .attr("class", "q3-y-label")
+  .attr("transform", `translate(10, ${margin.top + height / 2}) rotate(-90)`)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Number of Fines");
+
 // scales
 const x = d3.scaleLinear().range([0, width]);
 const y = d3.scaleLinear().range([height, 0]);

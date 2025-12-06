@@ -239,6 +239,33 @@ d3.csv("data/visualisation4.csv").then(raw => {
       .style("font-size","12px")
       .style("fill","#333");
 
+      // --- X-axis Label ---
+svgBar.append("text")
+  .attr("class", "q4-x-label")
+  .attr("x", width / 2)
+  .attr("y", height + 30)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Age Group");
+
+// --- Y-axis Label ---
+svgBar.append("text")
+  .attr("class", "q4-y-label")
+  .attr("transform", `translate(-65, ${height / 2}) rotate(-90)`)
+  .attr("text-anchor", "middle")
+  .style("font-size", "14px")
+  .text("Number of Fines");
+
+// --- Chart Title ---
+svgBar.append("text")
+  .attr("class", "q4-chart-title")
+  .attr("x", width / 2)
+  .attr("y", -10)
+  .attr("text-anchor", "middle")
+  .style("font-size", "18px")
+  .style("font-weight", "600")
+  .text("Age-group Patterns of Speeding Fines (2023–2024)");
+
     const legend = svgBar.append("g").attr("transform", `translate(0, ${height + 40})`);
     filtered.forEach((d, i) => {
       const g = legend.append("g").attr("transform", `translate(${i*120},0)`);
