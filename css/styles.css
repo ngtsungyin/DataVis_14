@@ -1278,6 +1278,520 @@ p{
   min-width: 900px;
 }
 
+/* ============================================
+   RESPONSIVE DESIGN - MOBILE, TABLET, LAPTOP
+   ============================================ */
+
+/* Tablet (768px - 1024px) */
+@media (max-width: 1024px) {
+  :root {
+    --page-padding: 60px;
+  }
+  
+  .container, .container-inner {
+    padding: 0 24px;
+  }
+  
+  /* Hero adjustments */
+  .hero .title {
+    font-size: 90px;
+  }
+  
+  .hero .hero-image {
+    height: 400px;
+    width: 90vw;
+  }
+  
+  /* Navigation */
+  .nav {
+    gap: 24px;
+  }
+  
+  .nav a {
+    font-size: 18px;
+  }
+  
+  /* Values grid */
+  .values {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  
+  /* Team grid */
+  .team-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+  }
+  
+  /* Visualization section */
+  .vis-row {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .vis-menu {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  
+  /* Q4 charts on tablet */
+  #q4-charts {
+    flex-direction: column;
+    gap: 30px;
+  }
+  
+  #barChart,
+  #pieChart {
+    min-width: 100%;
+    flex: 1 1 100%;
+  }
+}
+
+/* Mobile (max-width: 768px) */
+@media (max-width: 768px) {
+  :root {
+    --page-padding: 40px;
+  }
+  
+  body {
+    font-size: 16px;
+  }
+  
+  .container, .container-inner {
+    padding: 0 16px;
+  }
+  
+  /* Header & Navigation */
+  .site-header {
+    height: 70px;
+  }
+  
+  .header-content {
+    padding: 0 16px;
+  }
+  
+  .navbar .nav {
+    display: none; /* Hide main nav on mobile */
+  }
+  
+  .sidebar-toggle {
+    display: block;
+  }
+  
+  /* Hero Section */
+  .hero {
+    padding: 40px 0 60px;
+  }
+  
+  .hero .title {
+    font-size: 48px;
+    margin: 20px 0 30px;
+  }
+  
+  .hero .hero-frame {
+    padding: 20px;
+  }
+  
+  .hero .hero-image {
+    height: 300px;
+    width: 95vw;
+    border: 6px solid #0b0b0b;
+  }
+  
+  /* Typography */
+  h1 {
+    font-size: 32px !important;
+  }
+  
+  h2 {
+    font-size: 36px;
+  }
+  
+  h3 {
+    font-size: 24px;
+  }
+  
+  p {
+    font-size: 16px;
+  }
+  
+  /* Footer */
+  .footer-strip {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    font-size: 16px;
+    padding: 20px 16px;
+  }
+  
+  /* Background & Values Section */
+  .values {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .value {
+    padding: 20px;
+  }
+  
+  .value h4 {
+    font-size: 18px;
+  }
+  
+  .value p {
+    font-size: 16px;
+  }
+  
+  /* Visualization Section */
+  .vis-row {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  
+  .vis-list li {
+    font-size: 16px;
+    padding: 18px 0 18px 50px;
+  }
+  
+  .vis-list li::before {
+    font-size: 28px;
+    top: 18px;
+  }
+  
+  .vis-menu {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin: 30px auto;
+  }
+  
+  .vis-btn {
+    padding: 16px 18px;
+    font-size: 16px;
+  }
+  
+  .btn {
+    padding: 14px 22px;
+    font-size: 16px;
+  }
+  
+  /* Team Section */
+  .team-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  
+  .team-card {
+    padding: 20px;
+  }
+  
+  .team-card h3 {
+    font-size: 24px;
+  }
+  
+  .team-card small {
+    font-size: 14px;
+  }
+  
+  /* Dashboard */
+  .dashboard {
+    padding: 40px 16px;
+  }
+  
+  .dashboard h1 {
+    font-size: 32px;
+    margin: 20px 0;
+  }
+  
+  /* Chart Controls */
+  .chart-controls {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px 16px;
+  }
+  
+  .control-group {
+    width: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .toggle-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  .toggle-btn {
+    width: 100%;
+    padding: 12px;
+    font-size: 14px;
+  }
+  
+  /* Chart Container */
+  .chart-container {
+    min-height: 300px;
+    padding: 16px !important;
+    margin: 20px auto;
+  }
+  
+  /* Q2 - Visualization 2 (Map & Line Chart) */
+  .q2-chart-container {
+    padding: 16px;
+  }
+  
+  .map-container {
+    min-height: 350px;
+  }
+  
+  .q2-view-buttons {
+    flex-direction: column;
+    width: 100%;
+    gap: 8px;
+  }
+  
+  .q2-view-btn {
+    min-width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+  }
+  
+  .q2-controls {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .q2-line-controls {
+    flex-direction: column;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  
+  .q2-jurisdiction-checkboxes {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .q2-jurisdiction-checkboxes label {
+    font-size: 13px;
+    padding: 8px 6px;
+  }
+  
+  .jurisdiction-table {
+    font-size: 11px;
+  }
+  
+  .jurisdiction-table th,
+  .jurisdiction-table td {
+    padding: 8px 4px;
+  }
+  
+  .data-table-container {
+    max-height: 250px;
+  }
+  
+  /* Q2 Notes */
+  .q2-notes {
+    padding: 16px;
+    font-size: 14px;
+    margin: 20px 0;
+  }
+  
+  /* Q3 - Visualization 3 (Camera vs Police) */
+  .q3-top-controls {
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .q3-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  
+  .q3-view-buttons {
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .q3-view-btn {
+    width: 100%;
+    padding: 14px;
+  }
+  
+  .q3-filter-buttons {
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+  }
+  
+  .q3-filter-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  #q3-chart-wrap {
+    padding: 16px;
+  }
+  
+  .q3-notes {
+    padding: 16px;
+    font-size: 14px;
+  }
+  
+  /* Q4 - Visualization 4 (Age Groups) */
+  #q4-charts {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  #barChart,
+  #pieChart {
+    min-width: 100%;
+    width: 100%;
+    flex: 1 1 100%;
+  }
+  
+  #q4-charts.bar-only #barChart {
+    min-width: 100%;
+  }
+  
+  #q4-age-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  
+  #q4-age-checkboxes label {
+    font-size: 13px;
+    padding: 8px;
+  }
+  
+  .q4-notes {
+    padding: 16px;
+    font-size: 14px;
+  }
+  
+  /* Q5 - Visualization 5 (Monthly Seasonality) */
+  #line-chart svg {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  #vis5-legend {
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+  }
+  
+  .chart-note {
+    padding: 16px 20px !important;
+    font-size: 14px !important;
+    margin: 0 auto 40px auto;
+  }
+  
+  /* Q6 - Visualization 6 (Location Heatmap) */
+  #heatmap-chart {
+    padding: 16px !important;
+    overflow-x: auto;
+  }
+  
+  /* Filter Pills */
+  .filter-row {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .filter-pill {
+    padding: 10px 14px;
+    font-size: 14px;
+  }
+}
+
+/* Small Mobile (max-width: 480px) */
+@media (max-width: 480px) {
+  .hero .title {
+    font-size: 36px;
+  }
+  
+  .hero .hero-image {
+    height: 220px;
+  }
+  
+  h1 {
+    font-size: 28px !important;
+  }
+  
+  h2 {
+    font-size: 28px;
+  }
+  
+  .q2-jurisdiction-checkboxes {
+    grid-template-columns: 1fr;
+  }
+  
+  #q4-age-checkboxes {
+    grid-template-columns: 1fr;
+  }
+  
+  .jurisdiction-table {
+    font-size: 10px;
+  }
+  
+  .jurisdiction-table th,
+  .jurisdiction-table td {
+    padding: 6px 2px;
+  }
+  
+  .footer-strip {
+    font-size: 14px;
+  }
+  
+  .toggle-buttons {
+    gap: 6px;
+  }
+}
+
+/* Landscape Mobile (max-height: 500px) */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    padding: 30px 0 40px;
+  }
+  
+  .hero .hero-image {
+    height: 250px;
+  }
+  
+  .sidebar {
+    padding: 10px 0;
+  }
+}
+
+/* Ensure images are responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Ensure SVG charts are responsive */
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Hide overflow on mobile for tables */
+@media (max-width: 768px) {
+  .data-table-container {
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
 
 
 
