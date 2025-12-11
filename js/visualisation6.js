@@ -107,14 +107,28 @@ d3.csv("data/visualisation6.csv").then(function(data) {
     .attr("stroke", "#ececec")
     .attr("stroke-width", 1)
     .on("mouseover", function(event, d) {
-      d3.select(this).attr("stroke", "#222");
+      d3.select(this)
+        .attr("stroke", "#222")
+        .attr("stroke-width", 2.5)
+        .style("filter", "drop-shadow(0 2px 6px rgba(0,0,0,0.3))")
+        .style("cursor", "pointer");
       tooltip.style("display", "block")
-        .html(`<strong>${d.loc}</strong><br>Year: ${d.year}<br>Fines: ${d.val}`)
+        .html(`
+          <div style='font-weight:700;font-size:16px;margin-bottom:10px;color:#c53030;border-bottom:2px solid #e53e3e;padding-bottom:8px;'>${d.loc}</div>
+          <div style='margin-bottom:6px;font-size:14px;color:#555;'><strong>Year:</strong> ${d.year}</div>
+          <div style='font-size:18px;font-weight:700;color:#e53e3e;margin-top:8px;'>${d.val > 0 ? d3.format(",")(d.val) + ' fines' : 'No data available'}</div>
+          ${d.val === 0 ? "<div style='font-size:12px;color:#999;margin-top:6px;font-style:italic;'>⚠️ Missing data for this period</div>" : ""}
+          ${d.val > 0 ? "<div style='font-size:11px;color:#888;margin-top:8px;'>Click cell for more details</div>" : ""}
+        `)
         .style("left", (event.pageX + 16) + "px")
         .style("top", (event.pageY - 24) + "px");
     })
     .on("mouseout", function() {
-      d3.select(this).attr("stroke", "#fff");
+      d3.select(this)
+        .attr("stroke", "#ececec")
+        .attr("stroke-width", 1)
+        .style("filter", "none")
+        .style("cursor", "default");
       tooltip.style("display", "none");
     });
 
@@ -153,13 +167,14 @@ d3.csv("data/visualisation6.csv").then(function(data) {
   svg.attr("viewBox", `0 0 ${width} ${height}`).attr("preserveAspectRatio", "xMidYMid meet");
   d3.select(svg.node()).style("width", "100%").style("height", "auto");
 
-  // Axis labels
+  // Axis labels with improved clarity
   svg.append("text")
     .attr("x", margin.left + (width - margin.left - margin.right) / 2)
-    .attr("y", margin.top - 40)
+    .attr("y", margin.top - 45)
     .attr("text-anchor", "middle")
-    .attr("font-size", "18px")
-    .attr("font-weight", "bold")
+    .attr("font-size", "16px")
+    .attr("font-weight", "700")
+    .attr("fill", "#333")
     .text("YEAR");
 
   // Position the Y-axis label further left so it doesn't overlap the chart
@@ -169,42 +184,64 @@ d3.csv("data/visualisation6.csv").then(function(data) {
     .attr("x", labelX)
     .attr("y", labelY)
     .attr("text-anchor", "middle")
-    .attr("font-size", "18px")
-    .attr("font-weight", "bold")
+    .attr("font-size", "16px")
+    .attr("font-weight", "700")
+    .attr("fill", "#333")
     .attr("transform", `rotate(-90,${labelX},${labelY})`)
-    .text("LOCATION");
+    .text("LOCATION TYPE");
 
-  // Tooltip
+  // Enhanced tooltip
   const tooltip = d3.select("body").append("div")
     .attr("class", "heatmap-tooltip")
     .style("position", "absolute")
-    .style("background", "#fff")
-    .style("border", "1px solid #ccc")
-    .style("padding", "8px 12px")
-    .style("border-radius", "8px")
-    .style("box-shadow", "0 2px 8px rgba(0,0,0,0.08)")
+    .style("background", "linear-gradient(135deg, #ffffff 0%, #fff5f5 100%)")
+    .style("border", "2px solid #fc8181")
+    .style("padding", "14px 20px")
+    .style("border-radius", "12px")
+    .style("box-shadow", "0 4px 16px rgba(0,0,0,0.15)")
     .style("pointer-events", "none")
-    .style("display", "none");
+    .style("display", "none")
+    .style("font-family", "Inter, -apple-system, BlinkMacSystemFont, Arial, sans-serif")
+    .style("z-index", "10000")
+    .style("min-width", "220px");
 
-  // Add a simple color legend
-  const legendWidth = Math.min(300, years.length * cellWidth * 0.6);
+  // Enhanced color legend with better clarity
+  const legendWidth = Math.min(320, years.length * cellWidth * 0.65);
   const legendX = margin.left + 20;
-  const legendY = height - margin.bottom + 20;
+  const legendY = height - margin.bottom + 35;
+
+  // Legend title
+  svg.append("text")
+    .attr("x", legendX)
+    .attr("y", legendY - 10)
+    .attr("font-size", "13px")
+    .attr("font-weight", "600")
+    .attr("fill", "#333")
+    .text("Number of Fines (Intensity Scale):");
 
   const defs = svg.append("defs");
   const grad = defs.append("linearGradient").attr("id","grad-heat").attr("x1","0%").attr("x2","100%");
-  grad.append("stop").attr("offset","0%").attr("stop-color","#f4cccc");
-  grad.append("stop").attr("offset","100%").attr("stop-color","#e53e3e");
+  grad.append("stop").attr("offset","0%").attr("stop-color","#fee");
+  grad.append("stop").attr("offset","40%").attr("stop-color","#fc8181");
+  grad.append("stop").attr("offset","100%").attr("stop-color","#c53030");
 
   svg.append("rect")
     .attr("x", legendX)
     .attr("y", legendY)
     .attr("width", legendWidth)
-    .attr("height", 12)
-    .style("fill", "url(#grad-heat)");
+    .attr("height", 14)
+    .attr("rx", 3)
+    .style("fill", "url(#grad-heat)")
+    .style("stroke", "#ddd")
+    .style("stroke-width", 1);
 
-  // legend ticks
+  // legend ticks with improved formatting
   const legendScale = d3.scaleLinear().domain([0, maxFines]).range([legendX, legendX + legendWidth]);
-  const legendAxis = d3.axisBottom(legendScale).ticks(3).tickFormat(d3.format(",d"));
-  svg.append("g").attr("transform", `translate(0,${legendY + 12})`).call(legendAxis).selectAll("text").attr("font-size","12px");
+  const legendAxis = d3.axisBottom(legendScale).ticks(5).tickFormat(d3.format(",.0f"));
+  svg.append("g")
+    .attr("transform", `translate(0,${legendY + 14})`)
+    .call(legendAxis)
+    .selectAll("text")
+    .attr("font-size","12px")
+    .attr("fill", "#555");
 });

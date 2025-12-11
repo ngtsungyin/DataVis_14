@@ -27,24 +27,31 @@
         </div>
     </div>
 
-    <h1>Monthly seasonality fines in 2024 by detection method</h1>
-    <p style="max-width:900px;margin:0 auto;color:var(--muted)">Monthly Fines by Detection Method (2024)</p>
-    <div class="chart-controls" style="max-width:900px;margin:0 auto 24px auto;">
-      <div class="control-group" style="display:flex;align-items:center;gap:18px;">
-        <label style="font-weight:600;font-size:20px;">Show Detection Methods:</label>
-        <div class="toggle-buttons">
-          <button class="toggle-btn active" data-method="all">All Methods</button>
-          <button class="toggle-btn" data-method="camera">Camera Issued</button>
-          <button class="toggle-btn" data-method="police">Police Issued</button>
+    <h1 style="margin-bottom:12px;font-size:clamp(1.5rem, 4vw, 2.2rem);text-align:center;line-height:1.2;">Monthly Seasonality in Speeding Fines (2024)</h1>
+    <p style="max-width:900px;margin:0 auto 8px auto;color:var(--muted);text-align:center;font-size:clamp(0.95rem, 2vw, 1.1rem);">Compare enforcement patterns across camera-issued and police-issued detections</p>
+    <div class="chart-controls" style="max-width:950px;margin:0 auto 32px auto;">
+      <div class="control-group" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:16px;">
+        <label style="font-weight:600;font-size:clamp(1rem, 2.5vw, 1.15rem);color:#333;">Filter by Detection Method:</label>
+        <div class="toggle-buttons" style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center;">
+          <button class="toggle-btn active" data-method="all" style="padding:10px 20px;font-size:clamp(0.85rem, 2vw, 1rem);">📊 All Methods</button>
+          <button class="toggle-btn" data-method="camera" style="padding:10px 20px;font-size:clamp(0.85rem, 2vw, 1rem);">📷 Camera Issued</button>
+          <button class="toggle-btn" data-method="police" style="padding:10px 20px;font-size:clamp(0.85rem, 2vw, 1rem);">👮 Police Issued</button>
         </div>
       </div>
     </div>
-    <div id="line-chart" class="chart-container">
-      <div class="chart-loading">Loading chart...</div>
+    <div id="line-chart" class="chart-container" style="max-width:1000px;margin:0 auto;padding:24px;background:#fafafa;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+      <div class="chart-loading" style="text-align:center;padding:60px 20px;color:#666;font-size:16px;">Loading chart data...</div>
     </div>
-    <div id="vis5-legend" style="display:flex;justify-content:center;align-items:center;margin-bottom:120px;"></div>
-      <div class="chart-note" style="max-width:900px;margin:0 auto 48px auto;padding:18px 24px;background:#f4faff;border-left:4px solid #3b82f6;color:#222;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-        <strong>Note:</strong> This chart shows the monthly fines issued in 2024, separated by detection method. Use the buttons above to filter by camera-issued or police-issued fines, or view all methods together. Observe how the seasonality and trends differ between detection methods across the months.<br><span style="color:#e94f37;font-size:16px;font-weight:500">The 'Unknown' category represents missing values in the data.</span>
+    <div id="vis5-legend" style="display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:24px;margin:28px auto 48px auto;padding:16px 24px;background:#fff;border-radius:8px;box-shadow:0 1px 6px rgba(0,0,0,0.05);max-width:950px;"></div>
+      <div class="chart-note" style="max-width:950px;margin:0 auto 64px auto;padding:24px 28px;background:linear-gradient(135deg, #f4faff 0%, #e8f4ff 100%);border-left:5px solid #3b82f6;border-radius:8px;color:#222;font-size:clamp(0.95rem, 2vw, 1.05rem);line-height:1.7;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+        <strong style="font-size:1.15em;display:block;margin-bottom:12px;color:#1e40af;">📊 How to Use This Chart:</strong>
+        <ul style="margin:12px 0 16px 0;padding-left:24px;">
+          <li style="margin-bottom:8px;"><strong>View seasonal patterns:</strong> Lines reveal monthly trends showing when fines peak throughout the year</li>
+          <li style="margin-bottom:8px;"><strong>Compare detection methods:</strong> Use filter buttons to isolate specific enforcement types and compare their patterns</li>
+          <li style="margin-bottom:8px;"><strong>Get precise data:</strong> Hover over any data point to see exact fine counts for that month and method</li>
+          <li style="margin-bottom:8px;"><strong>Identify trends:</strong> Notice how camera-issued fines show different seasonal patterns than police-issued fines</li>
+        </ul>
+        <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(59,130,246,0.3);"><span style="color:#e94f37;font-size:0.95em;font-weight:600;">⚠️ Data Note:</span> <span style="font-size:0.95em;">The 'Unknown' category represents fines where the detection method was not recorded in the dataset.</span></div>
       </div>
   </main>
 

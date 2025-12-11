@@ -28,11 +28,21 @@
         </div>
     </div>
     
-    <h1 style="margin-bottom:8px;font-size:2rem;font-weight:700;text-align:center;">Fines concentrated by location type from 2008 to 2024</h1>
-    <p style="max-width:900px;margin:0 0 24px 0;color:var(--muted);text-align:center;">Heatmap of fines by location type and year</p>
-    <div id="heatmap-chart" class="chart-container" style="max-width:1300px;margin:0 auto 32px auto;"></div>
-    <div class="chart-note" style="max-width:900px;margin:0 auto 48px auto;padding:18px 24px;background:#f4faff;border-left:4px solid #e53e3e;color:#222;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,0.04);">
-      <strong>Note:</strong> This heatmap shows the distribution of speeding fines across different location types and years. Darker colors indicate higher numbers of fines. Use this chart to compare how fine concentrations have shifted between regions from 2008 to 2024.<br><span style="color:#e53e3e;font-size:16px;font-weight:500">Empty cells indicate missing data for that year and location, not zero fines.</span>
+    <h1 style="margin-bottom:12px;font-size:clamp(1.5rem, 4vw, 2.2rem);font-weight:700;text-align:center;line-height:1.2;">Geographic Distribution of Speeding Fines (2008-2024)</h1>
+    <p style="max-width:950px;margin:0 auto 24px auto;color:var(--muted);text-align:center;font-size:clamp(0.95rem, 2vw, 1.1rem);line-height:1.5;">Explore how fine concentrations vary across Australian location types over 17 years</p>
+    <div id="heatmap-chart" class="chart-container" style="max-width:1350px;margin:0 auto 32px auto;padding:24px;background:#fafafa;border-radius:12px;box-shadow:0 2px 12px rgba(0,0,0,0.06);overflow-x:auto;"></div>
+    <div class="chart-note" style="max-width:950px;margin:0 auto 64px auto;padding:24px 28px;background:linear-gradient(135deg, #fff5f5 0%, #fee 100%);border-left:5px solid #e53e3e;border-radius:8px;color:#222;font-size:clamp(0.95rem, 2vw, 1.05rem);line-height:1.7;box-shadow:0 3px 12px rgba(0,0,0,0.08);">
+      <strong style="font-size:1.15em;display:block;margin-bottom:12px;color:#c53030;">🗺️ How to Read This Heatmap:</strong>
+      <ul style="margin:12px 0 16px 0;padding-left:24px;">
+        <li style="margin-bottom:8px;"><strong>Color intensity = fine volume:</strong> Darker red cells indicate higher fine concentrations; lighter shades show fewer fines</li>
+        <li style="margin-bottom:8px;"><strong>Interactive exploration:</strong> Hover over any cell to see exact fine counts and location details for that year</li>
+        <li style="margin-bottom:8px;"><strong>Compare across dimensions:</strong> Scan horizontally to see how one location changed over time, or vertically to compare locations in a specific year</li>
+        <li style="margin-bottom:8px;"><strong>Identify patterns:</strong> Look for trends like increasing enforcement in major cities or shifts in regional patterns</li>
+      </ul>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid rgba(229,62,62,0.3);">
+        <span style="color:#c53030;font-size:0.95em;font-weight:600;">⚠️ Data Quality Note:</span> 
+        <span style="font-size:0.95em;">White/empty cells indicate <strong>missing data</strong> for that year-location combination, not zero fines. Data collection became more comprehensive in later years, especially after 2020.</span>
+      </div>
     </div>
   </main>
 
